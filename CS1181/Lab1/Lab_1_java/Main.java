@@ -74,17 +74,17 @@ public class Main {
 
         // }
         String password;
-        boolean loginSuccess = false;
+       
         boolean accountLocked = false;
 
         // Checking secureuser password
-        //while (!loginSuccess && !accountLocked) {
+        //while (!accountLocked) {
         while (!accountLocked) {    
             System.out.println("Input password:");
             password = scnr.nextLine();
             if (userMan.authenticate(password)) {
                 System.out.println("Login sucessful!");
-                loginSuccess = true;
+                
             } else {
                 System.out.println("Login failed");
                 accountLocked = userMan.accountLocked();
