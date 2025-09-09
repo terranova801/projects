@@ -1,0 +1,5 @@
+AWS Instance Login Instructions
+Commands using my Spectre Laptop
+    Within location ->    /media/shared/proj$ ssh -i ceg2350-aws-vm.pem ubuntu@3.231.254.200
+COMMAND TO RUN:
+cd /media/shared/proj | ssh -i ceg2350-aws-vm.pem ubuntu@3.231.254.200
