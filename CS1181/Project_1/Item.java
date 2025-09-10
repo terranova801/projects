@@ -1,6 +1,7 @@
 package CS1181.Project_1;
 
 public class Item {
+    //Object variables
     private final String name;
     private final double weight;
     private final int value;
@@ -13,6 +14,28 @@ public class Item {
 
     public Item(Item other) {
         
+    }
+
+    
+    
+    
+    //getters
+    public double getWeight() {
+
+    }
+    public int getValue() {
+
+    }
+    public boolean isIncluded() {
+
+    }
+
+    //setters
+    public void setIncluded(boolean Included) {
+
+    }
+    public String toString() {
+
     }
 
 }
