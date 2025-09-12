@@ -25,7 +25,7 @@ public class Golfer implements Comparable<Golfer> {
         if (Integer.compare(this.score, other.score) != 0) { // sorts by score first
             return Integer.compare(this.score, other.score);
         } else if (Integer.compare(this.holesCompleted, other.holesCompleted) != 0) { // sorts by holes completed next
-            return Integer.compare(this.holesCompleted, other.holesCompleted);
+            return Integer.compare(other.holesCompleted, this.holesCompleted);
         } else if (this.lastName.compareTo(other.lastName) != 0) { // sorts by last name next}
             return this.lastName.compareTo(other.lastName);
         } else {
