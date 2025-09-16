@@ -1,0 +1,30 @@
+LAB03 Course Info:
+https://pattonsgirl.github.io/CEG2350/Labs/Lab03/Instructions.html
+
+Helpful IO Redirection links (part 3):
+
+
+An Intro to Linux IO Redirection
+    https://www.digitalocean.com/community/tutorials/an-introduction-to-linux-i-o-redirection
+RedHat - How to manipulate files with shell redirection and pipelines in Linux
+    https://www.redhat.com/en/blog/linux-shell-redirection-pipelining
+freeCodeCamp - How to Set an Environment Variable in Linux
+    https://www.freecodecamp.org/news/how-to-set-an-environment-variable-in-linux/
+Linuxize - How to Set and List Environment Variables in Linux
+    https://linuxize.com/post/how-to-set-and-list-environment-variables-in-linux/
+
+
+Shell scripting links (part 4):
+
+IO Flood: Bash Shell Scripting: Random Number Generation
+    https://ioflood.com/blog/bash-random-number/
+IO Flood: Bash read man page: Using the Linux read command
+    https://ioflood.com/blog/bash-read-man-page-using-the-linux-read-command/
+Digital Ocean - How to Read Command Line Arguments in Shell Scripts?
+    https://www.digitalocean.com/community/tutorials/read-command-line-arguments-in-shell-scripts
+Cloudzy - Bash If Statement: Syntax, Variations, Use Cases, Commands, and More!
+    https://cloudzy.com/blog/bash-if-statement/
+IO Flood - Bash While Loop: Shell Scripting Reference Guide
+    https://ioflood.com/blog/bash-while-loop/
+ShellCheck - finds bugs in your shell scripts
+    https://www.shellcheck.net/
