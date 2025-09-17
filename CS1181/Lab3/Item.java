@@ -1,13 +1,17 @@
-public class Item implements Product {
-    public static void main(String[] args) {
+public class Item {
+    private String productName;
+    private double productPrice;
 
+    public Item(String name, double price) {
+        this.productName = name;
+        this.productPrice = price;
     }
 
-}
-
-interface Product {
+    public String getName() {
+        return this.productName;
+    }
+    public double getPrice() {
+        return this.productPrice;
+    }
     
-    int getTotalPrice();
-    boolean isTaxable();
-
 }
