@@ -2,7 +2,7 @@
 
 public interface Product {
     
-    int getTotalPrice();
+    double getTotalPrice();
     boolean isTaxable();
 
 }
