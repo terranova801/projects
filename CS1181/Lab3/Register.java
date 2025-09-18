@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 public class Register {
+    /**
+     * Main method which creates Product arraylist, creates products
+     * and adds the to the arraylist and then prints each item out
+     * @param args
+     */
     public static void main(String[] args) {
         ArrayList<Product> products = new ArrayList<>(); 
         products.add(new NecessaryProduct("Cheese", 1.50));
