@@ -1,9 +1,8 @@
 
-public class Athlete implements Comparable<Athlete> {
-    private String firstName;
-    private String lastName;
+public class Athlete<T extends Comparable<T>> implements Comparable<Athlete<T>> {
+    private String name;
     private String sport;
-    private Integer rank;
+    private T rank;
 
     // default constructor with no variables passed
     public Athlete() {
@@ -11,41 +10,36 @@ public class Athlete implements Comparable<Athlete> {
     }
 
     // constructor that uses passed variables
-    public Athlete(String firstName, String lastName, String sport, Integer rank) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Athlete(String name, String sport, T rank) {
+        this.name = name;
         this.sport = sport;
         this.rank = rank;
     }
 
     // CompareTo method
     @Override
-    public int compareTo(Athlete other) {
+    public int compareTo(Athlete<T> other) {
         if (this.sport.compareTo(other.sport) != 0) { // sorts by sport first
             return this.sport.compareTo(other.sport);
-        } else if (Integer.compare(this.rank, other.rank) != 0) { // sorts by score first
-            return Integer.compare(this.rank, other.rank);
-        } else if (this.firstName.compareTo(other.firstName) != 0) { // sorts by first name
-            return this.firstName.compareTo(other.firstName);
         } else {
-            return this.lastName.compareTo(other.lastName); // finally sorts by last name
+            return this.name.compareTo(other.name); // finally sorts by last name
         }
     }
 
-    public String getfirstName() {
-        return this.firstName;
-    }
 
-    public String getlastName() {
-        return this.lastName;
+    public String getName() {
+        return this.name;
     }
 
     public String getSport() {
         return this.sport;
     }
+    public T getRank() {
+        return this.rank;
+    }
 
     public String toString() {
-        String output = this.firstName + " " + this.lastName + " (" + this.sport + " - " + this.rank + ")";
+        String output = this.name + " (" + this.sport + " - " + this.rank + ")";
         return output;
 
     }
