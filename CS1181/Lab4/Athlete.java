@@ -1,4 +1,3 @@
-package CS1181.Lab4;
 
 public class Athlete implements Comparable<Athlete> {
     private String firstName;
