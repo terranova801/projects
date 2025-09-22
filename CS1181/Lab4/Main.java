@@ -8,6 +8,7 @@ public class Main {
         ArrayList<Athlete> athletes = new ArrayList<Athlete>();
 
         athletes.add(new Athlete("John", "Doe", "baseball"));
+        athletes.add(new Athlete("James", "Shelton", "swimming"));
         athletes.add(new Athlete("Sam", "Johnson", "football"));
         athletes.add(new Athlete("Kevin", "Smith", "baseball"));
         athletes.add(new Athlete("Sally", "Johnson", "swimming"));
