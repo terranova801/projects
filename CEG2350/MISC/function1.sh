@@ -6,6 +6,6 @@ read hours
 
 calcSalary $base $hours
 function calcSalary ( ) {
-salary=$1*$2
+salary=$base*$hours
 echo $salary
 }
