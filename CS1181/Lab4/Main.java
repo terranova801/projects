@@ -7,13 +7,13 @@ public class Main {
     public static void main(String[] args) {
         ArrayList<Athlete> athletes = new ArrayList<Athlete>();
 
-        athletes.add(new Athlete("John", "Doe", "baseball"));
-        athletes.add(new Athlete("James", "Shelton", "swimming"));
-        athletes.add(new Athlete("Sam", "Johnson", "football"));
-        athletes.add(new Athlete("Kevin", "Smith", "baseball"));
-        athletes.add(new Athlete("Sally", "Johnson", "swimming"));
-        athletes.add(new Athlete("James", "Smith", "swimming"));
-        athletes.add(new Athlete("Meagan", "Kelly", "swimming"));
+        athletes.add(new Athlete("John", "Doe", "baseball", 33));
+        athletes.add(new Athlete("James", "Shelton", "swimming", 4));
+        athletes.add(new Athlete("Sam", "Johnson", "football", 77));
+        athletes.add(new Athlete("Kevin", "Smith", "baseball", 2));
+        athletes.add(new Athlete("Sally", "Johnson", "swimming", 9));
+        athletes.add(new Athlete("James", "Smith", "swimming", 43));
+        athletes.add(new Athlete("Meagan", "Kelly", "swimming", 1));
 
         // Unsorted outputs
         System.out.println("\n" + "Before Sorting:" + "\n");
