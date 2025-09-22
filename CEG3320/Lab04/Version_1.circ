@@ -240,4 +240,36 @@
     <a name="circuitnamedboxfixedsize" val="true"/>
     <a name="simulationFrequency" val="1.0"/>
   </circuit>
+  <circuit name="Compare">
+    <a name="appearance" val="logisim_evolution"/>
+    <a name="circuit" val="Compare"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1.0"/>
+    <comp lib="0" loc="(140,100)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="A"/>
+    </comp>
+    <comp lib="0" loc="(140,120)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="B"/>
+    </comp>
+    <comp lib="0" loc="(150,190)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="message_in"/>
+      <a name="width" val="2"/>
+    </comp>
+    <comp lib="0" loc="(160,120)" name="Splitter">
+      <a name="appear" val="center"/>
+      <a name="bit0" val="1"/>
+      <a name="bit1" val="0"/>
+      <a name="facing" val="west"/>
+      <a name="spacing" val="2"/>
+    </comp>
+    <comp lib="2" loc="(240,60)" name="Multiplexer">
+      <a name="select" val="2"/>
+    </comp>
+    <wire from="(160,120)" to="(160,140)"/>
+    <wire from="(160,140)" to="(220,140)"/>
+    <wire from="(220,80)" to="(220,140)"/>
+  </circuit>
 </project>

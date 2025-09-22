@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project source="3.9.0" version="1.0">
-  This file is intended to be loaded by Logisim-evolution v3.9.0(https://github.com/logisim-evolution/).
+<project source="4.0.0" version="1.0">
+  This file is intended to be loaded by Logisim-evolution v4.0.0(https://github.com/logisim-evolution/).
 
   <lib desc="#Wiring" name="0">
     <tool name="Pin">
@@ -38,7 +38,7 @@
     <tool lib="0" name="Pin"/>
     <tool lib="0" name="Pin">
       <a name="facing" val="west"/>
-      <a name="output" val="true"/>
+      <a name="type" val="output"/>
     </tool>
     <sep/>
     <tool lib="1" name="NOT Gate"/>
@@ -60,29 +60,29 @@
       <a name="appearance" val="NewPins"/>
       <a name="label" val="A1"/>
     </comp>
-    <comp lib="0" loc="(100,210)" name="Pin">
+    <comp lib="0" loc="(100,130)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="B0"/>
+      <a name="label" val="A0"/>
     </comp>
     <comp lib="0" loc="(100,270)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="label" val="B1"/>
     </comp>
-    <comp lib="0" loc="(100,50)" name="Pin">
+    <comp lib="0" loc="(100,290)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="A0"/>
+      <a name="label" val="B0"/>
+    </comp>
+    <comp lib="0" loc="(700,120)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="C1"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(700,140)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="C0"/>
-      <a name="output" val="true"/>
-    </comp>
-    <comp lib="0" loc="(700,220)" name="Pin">
-      <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="C1"/>
-      <a name="output" val="true"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="1" loc="(330,160)" name="NOT Gate"/>
     <comp lib="1" loc="(330,180)" name="NOT Gate"/>
@@ -92,60 +92,62 @@
     <comp lib="1" loc="(510,140)" name="AND Gate"/>
     <comp lib="1" loc="(510,200)" name="AND Gate"/>
     <comp lib="1" loc="(620,150)" name="OR Gate"/>
-    <comp lib="8" loc="(187,105)" name="Text">
+    <comp lib="8" loc="(185,105)" name="Text">
       <a name="text" val="A1"/>
     </comp>
-    <comp lib="8" loc="(211,158)" name="Text">
+    <comp lib="8" loc="(210,155)" name="Text">
       <a name="text" val="B1"/>
     </comp>
-    <comp lib="8" loc="(211,218)" name="Text">
+    <comp lib="8" loc="(210,215)" name="Text">
       <a name="text" val="B1"/>
     </comp>
-    <comp lib="8" loc="(280,48)" name="Text">
+    <comp lib="8" loc="(280,45)" name="Text">
       <a name="text" val="A0"/>
     </comp>
-    <comp lib="8" loc="(318,311)" name="Text">
+    <comp lib="8" loc="(315,310)" name="Text">
       <a name="text" val="A1"/>
     </comp>
-    <comp lib="8" loc="(320,267)" name="Text">
+    <comp lib="8" loc="(320,265)" name="Text">
       <a name="text" val="B1"/>
     </comp>
-    <comp lib="8" loc="(342,194)" name="Text">
-      <a name="text" val="A1'"/>
-    </comp>
-    <comp lib="8" loc="(343,159)" name="Text">
+    <comp lib="8" loc="(340,155)" name="Text">
       <a name="text" val="B1'"/>
+    </comp>
+    <comp lib="8" loc="(340,190)" name="Text">
+      <a name="text" val="A1'"/>
     </comp>
     <comp lib="8" loc="(425,180)" name="Text">
       <a name="text" val="A1' + B1"/>
     </comp>
-    <comp lib="8" loc="(425,238)" name="Text">
+    <comp lib="8" loc="(425,235)" name="Text">
       <a name="text" val="B0"/>
     </comp>
-    <comp lib="8" loc="(431,137)" name="Text">
+    <comp lib="8" loc="(430,135)" name="Text">
       <a name="text" val="A1 + B1'"/>
     </comp>
-    <comp lib="8" loc="(526,287)" name="Text">
+    <comp lib="8" loc="(525,285)" name="Text">
       <a name="text" val="A1 + B1"/>
     </comp>
-    <comp lib="8" loc="(565,187)" name="Text">
+    <comp lib="8" loc="(565,185)" name="Text">
       <a name="text" val="B0(A1' + B1)"/>
     </comp>
-    <comp lib="8" loc="(577,122)" name="Text">
+    <comp lib="8" loc="(575,120)" name="Text">
       <a name="text" val="A0(A1 + B1')"/>
     </comp>
-    <comp lib="8" loc="(802,228)" name="Text">
+    <comp lib="8" loc="(799,130)" name="Text">
       <a name="text" val="= A1 + B1"/>
     </comp>
-    <comp lib="8" loc="(871,149)" name="Text">
+    <comp lib="8" loc="(872,148)" name="Text">
       <a name="text" val="= A0(A1 + B1') + B0(A1' + B1)"/>
     </comp>
     <wire from="(100,110)" to="(280,110)"/>
-    <wire from="(100,210)" to="(110,210)"/>
+    <wire from="(100,130)" to="(110,130)"/>
     <wire from="(100,270)" to="(140,270)"/>
-    <wire from="(100,50)" to="(450,50)"/>
-    <wire from="(110,210)" to="(110,240)"/>
+    <wire from="(100,290)" to="(110,290)"/>
+    <wire from="(110,240)" to="(110,290)"/>
     <wire from="(110,240)" to="(460,240)"/>
+    <wire from="(110,50)" to="(110,130)"/>
+    <wire from="(110,50)" to="(450,50)"/>
     <wire from="(140,160)" to="(140,220)"/>
     <wire from="(140,160)" to="(300,160)"/>
     <wire from="(140,220)" to="(140,270)"/>
@@ -178,6 +180,9 @@
     <wire from="(620,150)" to="(680,150)"/>
     <wire from="(680,140)" to="(680,150)"/>
     <wire from="(680,140)" to="(700,140)"/>
-    <wire from="(700,220)" to="(700,290)"/>
+    <wire from="(690,120)" to="(690,160)"/>
+    <wire from="(690,120)" to="(700,120)"/>
+    <wire from="(690,160)" to="(700,160)"/>
+    <wire from="(700,160)" to="(700,290)"/>
   </circuit>
 </project>
