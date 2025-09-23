@@ -6,7 +6,7 @@ public class GeneticAlgorithm {
 
     public static void main(String[] args) throws FileNotFoundException {
         String filename = "Items.txt";
-        // String fileNameTwo = "more_Items.txt"
+        //String filenameTwo = "more_Items.txt";
         try {
             ArrayList<Item> itemList = readData(filename);
             for (Item i : itemList) {
@@ -17,7 +17,8 @@ public class GeneticAlgorithm {
         }
     }
 
-    // Arraylist that reads txt file
+    // Arraylist that reads txt file, currently works
+
     public static ArrayList<Item> readData(String filename) throws FileNotFoundException {
         File itemsReader = new File(filename);
         Scanner inputItemsFile = new Scanner(itemsReader);
@@ -41,8 +42,8 @@ public class GeneticAlgorithm {
     }
 
     // Creates and returns arraylist with objects and the attributes FIXME
-    // public static ArrayList<Chromosome> initializePopulation(ArrayList<Item> items, int populationSize) {
+    public static ArrayList<Chromosome> initializePopulation(ArrayList<Item>items, int populationSize) {
 
-    // }
+    }
 
 }

@@ -1,10 +1,11 @@
 import java.util.ArrayList;
-import java.util.random.RandomGenerator;
+import java.util.Random;
+import java.util.Random;
 
 public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome> {
 
     //RNG
-    public static Random rng;
+    public static Random rng = new Random();
 
     //No-arg constructor, left empty
     public Chromosome() {
@@ -12,9 +13,16 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
     }
 
     //Adds a copy of the items passed in to this Chromosome
-    //FIXME
     public Chromosome(ArrayList<Item> items) {
-        items.add()
+        super(items.size());
+       
+        for (Item gene : items) {
+            Item copy = new Item(gene);
+
+            //randomized inclusions
+            copy.setIncluded(rng.nextBoolean());
+            this.add(copy);
+        }
     }
 
     //Crossover, generates a new chromosome from two intial chromosomes
