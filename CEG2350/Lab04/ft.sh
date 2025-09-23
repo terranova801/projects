@@ -20,6 +20,8 @@ echo "The record has been added"
 
 
 ##needs work not deleting strings 
+##better, using appropriate method but still not removing string record
+
 remove)
 if  [[ -z "$string2" ]]; then 
 echo "Input record description to delete:"
@@ -31,7 +33,7 @@ then
 toDel=grep $string2 "$tasklocation"
 
 echo "Found string"
-sed -i 's/ $toDel//' "$tasklocation"
+sed -i '/"$toDel"/d' "$tasklocation"
 
 
 else
