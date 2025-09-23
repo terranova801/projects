@@ -1,5 +1,3 @@
-package CS1181.Project_1;
-
 
 /** Finished setting all methods needs documentation
  * 
