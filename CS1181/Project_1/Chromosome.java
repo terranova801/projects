@@ -1,5 +1,3 @@
-package CS1181.Project_1;
-
 import java.util.ArrayList;
 import java.util.random.RandomGenerator;
 
@@ -14,7 +12,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
     }
 
     //Adds a copy of the items passed in to this Chromosome
-    FIXME
+    //FIXME
     public Chromosome(ArrayList<Item> items) {
         items.add()
     }
