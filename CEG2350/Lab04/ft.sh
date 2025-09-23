@@ -16,15 +16,24 @@ echo $string2 >> $tasklocation
 echo "The record has been added"
 ;;
 
+
+
+
+##needs work not deleting strings 
 remove)
 if  [[ -z "$string2" ]]; then 
 echo "Input record description to delete:"
 read string2
 fi
 
-if grep -i $string2 "$tasklocation";
+if grep -iq $string2 "$tasklocation";
 then
+toDel=grep $string2 "$tasklocation"
+
 echo "Found string"
+sed -i 's/ $toDel//' "$tasklocation"
+
+
 else
 echo "String not found"
 exit
@@ -33,6 +42,11 @@ fi
 echo "The record has been deleted"
 
 ;;
+
+
+
+
+
 
 view)
 echo -n "view"
