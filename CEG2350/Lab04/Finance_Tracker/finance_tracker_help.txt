@@ -1,0 +1,44 @@
+Finance Tracker User Guide
+
+This program is a finance tracker that allows users to track all expenses. Records are stored in the users home directory under the .finance name
+
+To initiate this program, from the command line enter './ft.sh' followed by the 'action' and optionally the 'description'
+
+Actions:
+
+add - Users can add a record to the tracker. The description can either be provided in quotations when initiating the function, or the user will be prompted for a
+	description
+
+	Example A: ./ft.sh add "Mortgage -1250"	//successful record addition
+
+	Example B: ./ft.sh add
+		   "Input record to add:"
+		    Mortgage -1250	//successful record addition
+
+remove - Users can delete a record from the finance tracker file by giving the program the description of the record to be deleted either from the command line, or
+	when prompted by the program
+	
+	Example A: ./ft.sh remove "Mortgage -1250"	//successful record removal
+
+	Example B: ./ft.sh remove
+		   "Input record to delete:"
+		   Mortgage -1250	//successful record removal
+
+view - Allows users to see all current records stored. No description required
+
+	Example: ./ft.sh view	//successfully displays all records
+
+clear - Will remove all records and delete the file associated with user records
+	
+	Example: ./ft.sh clear
+		 "Are you sure you want to delete all records?(y/n)"	//enter y to confirm, n to cancel
+
+help - Command to access this user guide
+	
+	Example: ./ft.sh help	//will print out help guide for user
+
+
+Created by Alex Feyh on 9/24/2025 for CEG2350
+
+Citations:
+	- https://saturncloud.io/blog/how-to-get-the-directory-where-a-bash-script-is-located/
