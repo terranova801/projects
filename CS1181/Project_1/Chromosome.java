@@ -5,6 +5,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
 
     // RNG
     private static Random crng = new Random();
+    int itemListSize;
 
     // No-arg constructor, left empty
     public Chromosome() {
@@ -13,7 +14,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
 
     // Adds a copy of the items passed in to this Chromosome
     public Chromosome(ArrayList<Item> items) {
-        super(items.size());
+        itemListSize = items.size();
 
         for (Item gene : items) {
             Item copy = new Item(gene);
@@ -31,7 +32,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         int ranVal;
         boolean isIncluded;
 
-        for (i = 0; i < 7; i++) {
+        for (i = 0; i < itemListSize; i++) {
             Item bluePrint = new Item(this.get(i));
 
             ranVal = crng.nextInt(10) + 1;
@@ -55,7 +56,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         int ranVal;
         int i;
 
-        for (i = 0; i < this.size(), i++) {
+        for (i = 0; i < this.size(); i++) {
             ranVal = crng.nextInt(10) + 1;
             if (ranVal == 1) {
                 Item flip = this.get(i);
