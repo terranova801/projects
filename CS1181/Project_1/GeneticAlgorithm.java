@@ -4,18 +4,33 @@ import java.io.*;
 public class GeneticAlgorithm {
 
     public static void main(String[] args) throws FileNotFoundException {
-        String filename = "Items.txt";
-        String filenameTwo = "more_Items.txt";
+        String itemsOne = "Items.txt";
+        String itemsTwo = "more_Items.txt";
+        String filename;
         int currIterations;
-        int totalIterations = 20;
+        int totalIterations;
         int i;
         int numToMutate;
         int whoMutate;
         int quant;
+        String userInput;
 
+        Scanner scnr = new Scanner(System.in);
         Random grng = new Random();
 
-        
+        System.out.println("Large list or short list?");
+        userInput = scnr.next();
+
+        if (userInput.toLowerCase().contains("large")) {
+            filename = itemsTwo;
+            totalIterations = 50;
+            
+        }
+        else {
+            filename = itemsOne;
+            totalIterations = 20;
+        }
+
 
 
 
@@ -23,7 +38,6 @@ public class GeneticAlgorithm {
       
         // Step 1: Initialize population
         ArrayList<Chromosome> currentPopulation = initializePopulation(itemList, 10);
-
         // Iteration loop
         for (currIterations = 0; currIterations < totalIterations; currIterations++) {
             // Step 2: Add each individual to nextgen
