@@ -21,7 +21,7 @@ public class Item {
         this.name = other.name;
         this.weight = other.weight;
         this.value = other.value;
-     //   this.included = other.included; //unsure if should be included
+        this.included = other.included; //unsure if should be included
     }
 
     // getters
