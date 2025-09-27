@@ -6,6 +6,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
     // RNG
     private static Random crng = new Random();
     int itemListSize;
+    private double weightLimit;
 
     // No-arg constructor, left empty
     public Chromosome() {
@@ -15,6 +16,13 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
     // Adds a copy of the items passed in to this Chromosome
     public Chromosome(ArrayList<Item> items) {
         itemListSize = items.size();
+
+          if (this.itemListSize > 7) {
+            this.weightLimit = 50.0;
+        }
+        else {
+            this.weightLimit = 10.0;
+        }
 
         for (Item gene : items) {
             Item copy = new Item(gene);
@@ -87,7 +95,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
                 value += gene.getValue();
             }
         }
-        if (weight > 10.0) { //Determines if backpack is overweight
+        if (weight > weightLimit) { //Determines if backpack is overweight
             value = 0;
         }
         return value;
@@ -129,8 +137,8 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
                 v += it.getValue();
             }
         }
-        sb.append(String.format("Weight: %.2f, Fitness: $%d", w, (w > 10.0 ? 0 : v)));
+        sb.append(String.format("Weight: %.2f, Fitness: $%d", w, (w > weightLimit ? 0 : v)));
         return sb.toString();
     }
-
+  
 }
