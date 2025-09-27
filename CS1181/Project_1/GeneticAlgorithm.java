@@ -5,55 +5,81 @@ public class GeneticAlgorithm {
 
     public static void main(String[] args) throws FileNotFoundException {
         String filename = "Items.txt";
-        // String filenameTwo = "more_Items.txt";
+        String filenameTwo = "more_Items.txt";
         int currIterations;
         int totalIterations = 20;
         int i;
+        int numToMutate;
+        int whoMutate;
+        int quant;
 
         Random grng = new Random();
+
         
+
+
+
         ArrayList<Item> itemList = readData(filename);
-        try {
-            ArrayList<Item> itemList = readData(filename);
-            // for (Item i : itemList) {
-            // System.out.println(i.toString());
-            // }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.getMessage());
-        }
+      
+        // Step 1: Initialize population
+        ArrayList<Chromosome> currentPopulation = initializePopulation(itemList, 10);
 
-        // Initialize population
-        ArrayList<Chromosome> currGenePool = initializePopulation(itemList, 10);
-
-        //Iteration loop
+        // Iteration loop
         for (currIterations = 0; currIterations < totalIterations; currIterations++) {
-            ArrayList<Chromosome> survivors = new ArrayList<>(currGenePool);
+            // Step 2: Add each individual to nextgen
+            ArrayList<Chromosome> nextGeneration = new ArrayList<>(currentPopulation);
 
-
-            //Random mating: First put parents into a new arraylist and shuffle
-            ArrayList<Chromosome> randomized = new ArrayList<>(currGenePool);
+            // Step3: Random mating, put parents into a new arraylist and shuffle
+            ArrayList<Chromosome> randomized = new ArrayList<>(currentPopulation);
             Collections.shuffle(randomized, grng);
 
-            //Crossover method to generate offspring
-            for (i = 0; i < randomized.size(); i++) { 
+            // Then crossover to generate offspring
+            for (i = 0; i < randomized.size(); i++) {
                 Chromosome parentA = randomized.get(i);
                 i += 1;
                 Chromosome parentB = randomized.get(i);
-                survivors.add(parentA.crossover(parentB));
+                nextGeneration.add(parentA.crossover(parentB));
             }
 
+            // Step 4: Mutation of at least 1 individual, or 10% of population
+            numToMutate = Math.max(1, ((int) Math.floor(nextGeneration.size() * 0.10))); // Calculates how many
+                                                                                         // mutations to perform
+            for (i = 0; i <= numToMutate; i++) { // Iterates dependent on number of chromosomes in population, but at
+                                                 // least once
+                whoMutate = grng.nextInt(nextGeneration.size()); // RNG to decide index location for chromosome mutation
+                nextGeneration.get(whoMutate).mutate(); // Mutates chromosome at random index location
+            }
+
+            // Step 5: Sort nextgen chromosomes by fitness
+            Collections.sort(nextGeneration);
+
+            // Step 6: Clear out currpopulation
+            currentPopulation.clear();
+
+            // Step 7: Add top ten of nextgen to currpop
+            if (nextGeneration.size() < 10) {
+                quant = nextGeneration.size();
+            } else {
+                quant = 10;
+            }
+
+            for (i = 0; i < quant; i++) {
+                currentPopulation.add(nextGeneration.get(i));
+            }
 
         }
+        //Step 9: Sort last iteration of the currentPopulation
+        Collections.sort(currentPopulation);
 
-
-
-
-
-
-
-
+        //Step 10: Output fittest individual
+        Chromosome mostFit = currentPopulation.get(0);
+        System.out.println("\n Fittest individual:");
+        System.out.println(mostFit);
+        System.out.println(mostFit.getFitness());
 
     }
+
+    
 
     // Arraylist that reads txt file, currently works
 
@@ -79,7 +105,7 @@ public class GeneticAlgorithm {
         return items;
     }
 
-    // Creates and returns arraylist with objects and the attributes FIXME
+    // Creates and returns arraylist with objects and the attributes 
     public static ArrayList<Chromosome> initializePopulation(ArrayList<Item> items, int populationSize) {
         int i;
         ArrayList<Chromosome> species = new ArrayList<>();
