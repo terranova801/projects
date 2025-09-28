@@ -1,6 +1,6 @@
 
-/** Finished setting all methods needs documentation
- * 
+/** 
+ * Class for item objects
  */
 public class Item {
     // Object variables
@@ -21,7 +21,7 @@ public class Item {
         this.name = other.name;
         this.weight = other.weight;
         this.value = other.value;
-        this.included = other.included; //unsure if should be included
+        this.included = other.included; 
     }
 
     // getters
@@ -43,7 +43,7 @@ public class Item {
     }
 
     public String toString() {
-        String toPrint = this.name + " (" + this.weight + " lbs , $" + this.value + ")";
+        String toPrint = this.name + " (" + this.weight + " lbs, $" + this.value + ")";
         return toPrint;
     }
 

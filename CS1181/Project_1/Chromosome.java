@@ -1,39 +1,52 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Chromosome class which holds methods for creating new Chromosome objects
+ * Crossover method generates a new Chromosome object from two parent Chromosomes
+ * Mutate method supports random mutation of the objects
+ * getFitness method determines which of two Chromosomes is more fit
+ * compareTo method responsible for ranking Chromosomes for fitness by their value
+ */
 public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome> {
 
     // RNG
     private static Random crng = new Random();
-    int itemListSize;
-    private double weightLimit;
+    int itemListSize;   //Size of textfile that contains item list
+    private double weightLimit; //Value used to determine maximum weight to be carried
 
     // No-arg constructor, left empty
     public Chromosome() {
-
     }
 
     // Adds a copy of the items passed in to this Chromosome
     public Chromosome(ArrayList<Item> items) {
-        itemListSize = items.size();
+        itemListSize = items.size();    //Records number of items
 
-          if (this.itemListSize > 7) {
-            this.weightLimit = 50.0;
+          if (this.itemListSize > 7) {  //Useful if using more_items list
+            this.weightLimit = 50.0;    //Arbitrary value, values of 10.0 would result in no valid chromosomes even after 50k+ iterations
+                                        //Plan to implement function to allow user to enter weight limit value
         }
         else {
-            this.weightLimit = 10.0;
+            this.weightLimit = 10.0;    //If using the default items list
         }
 
+        //Iterates for each item
         for (Item gene : items) {
-            Item copy = new Item(gene);
+            Item copy = new Item(gene); //Copies item
 
             // randomized inclusions
-            copy.setIncluded(crng.nextBoolean());
-            this.add(copy);
+            copy.setIncluded(crng.nextBoolean());      //Decides whether to include item using rng
+            this.add(copy);                         //Adds item to chromosome
         }
     }
 
     // Crossover, generates a new chromosome from two intial chromosomes
+    /**
+     * Generates a new offspring from two parent chromosomes
+     * @param other Parent chromosomes
+     * @return A new offspring chomosome
+     */
     public Chromosome crossover(Chromosome other) {
         Chromosome offSpring = new Chromosome();
         int i;
@@ -41,32 +54,37 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         boolean isIncluded;
 
         for (i = 0; i < itemListSize; i++) {
-            Item bluePrint = new Item(this.get(i));
+            Item bluePrint = new Item(this.get(i)); //Copies items from parent chromosome
 
-            ranVal = crng.nextInt(10) + 1;
+            ranVal = crng.nextInt(10) + 1;  //RNG from 1-10
 
+            //RNG value determines which parent chromosome to use to determine whether or not to include item at i location
             if (ranVal >= 6) {
-                isIncluded = other.get(i).isIncluded();
+                isIncluded = other.get(i).isIncluded(); //ParentB 
             } else {
-                isIncluded = this.get(i).isIncluded();
+                isIncluded = this.get(i).isIncluded();  //ParentA
             }
 
-            bluePrint.setIncluded(isIncluded);
-            offSpring.add(bluePrint);
+            bluePrint.setIncluded(isIncluded);  //takes boolean value that was set by parent and sets the blueprint item isincluded to same value
+            offSpring.add(bluePrint);   //Adds blueprint item to offspring chromosome
         }
-
+        //At end of loop offspring chromosome returned to main method
         return offSpring;
 
     }
 
     // mutator
+    /**
+     * Mutator method uses to randomly flip a chromosomes isIncluded boolean values for individual items
+     * 10% chance of mutation occuring with each "gene"
+     */
     public void mutate() {
         int ranVal;
         int i;
 
         for (i = 0; i < this.size(); i++) {
-            ranVal = crng.nextInt(10) + 1;
-            if (ranVal == 1) {
+            ranVal = crng.nextInt(10) + 1;  //RNG range 1-10
+            if (ranVal == 1) {          //If RNG returns 1, the isIncluded value is flipped using setIncluded
                 Item flip = this.get(i);
                 if (flip.isIncluded()) {
                 flip.setIncluded(false);
@@ -128,16 +146,16 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
   @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        double w = 0.0;
-        int v = 0;
-        for (Item it : this) {
-            if (it.isIncluded()) {
-                sb.append("• ").append(it.toString()).append("\n");
-                w += it.getWeight();
-                v += it.getValue();
+        double weight = 0.0;
+        int value = 0;
+        for (Item gene : this) {
+            if (gene.isIncluded()) {
+                sb.append(gene.toString()).append("\n");
+                weight += gene.getWeight();
+                value += gene.getValue();
             }
         }
-        sb.append(String.format("Weight: %.2f, Fitness: $%d", w, (w > weightLimit ? 0 : v)));
+        sb.append("Weight: " + weight + " Value: $" + value);
         return sb.toString();
     }
   
