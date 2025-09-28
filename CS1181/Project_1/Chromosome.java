@@ -142,7 +142,10 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         // }
     }
 
-    // String
+    // String buulder for final output of valid chromosome
+    /**
+     * Used https://www.geeksforgeeks.org/java/stringbuilder-class-in-java-with-examples/ for help
+     */
   @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -151,12 +154,12 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         for (Item gene : this) {
             if (gene.isIncluded()) {
                 sb.append(gene.toString()).append("\n");
-                weight += gene.getWeight();
-                value += gene.getValue();
+                weight += gene.getWeight(); //Calculates total weight of chromosome object
+                value += gene.getValue();   //Calculates total value of chromosome object
             }
         }
-        sb.append("Weight: " + weight + " Value: $" + value);
-        return sb.toString();
+        sb.append("Weight: " + weight + "lbs, Value: $" + value);
+        return sb.toString();   //Returns to main method to be printed
     }
   
 }
