@@ -104,34 +104,34 @@
     <comp lib="4" loc="(150,390)" name="D Flip-Flop">
       <a name="appearance" val="logisim_evolution"/>
     </comp>
-    <comp lib="8" loc="(156,154)" name="Text">
+    <comp lib="8" loc="(155,150)" name="Text">
       <a name="text" val="Mealy Device"/>
     </comp>
-    <comp lib="8" loc="(157,22)" name="Text">
+    <comp lib="8" loc="(155,20)" name="Text">
       <a name="text" val="Basic D Flip Flop"/>
     </comp>
-    <comp lib="8" loc="(168,325)" name="Text">
+    <comp lib="8" loc="(165,325)" name="Text">
       <a name="text" val="Moore Device"/>
     </comp>
-    <comp lib="8" loc="(33,168)" name="Text">
+    <comp lib="8" loc="(30,165)" name="Text">
       <a name="text" val="In"/>
     </comp>
-    <comp lib="8" loc="(33,358)" name="Text">
+    <comp lib="8" loc="(30,355)" name="Text">
       <a name="text" val="E"/>
     </comp>
-    <comp lib="8" loc="(428,336)" name="Text">
+    <comp lib="8" loc="(425,335)" name="Text">
       <a name="text" val="T"/>
     </comp>
-    <comp lib="8" loc="(449,202)" name="Text">
+    <comp lib="8" loc="(445,200)" name="Text">
       <a name="text" val="Shot = In + Q"/>
     </comp>
-    <comp lib="8" loc="(456,218)" name="Text">
+    <comp lib="8" loc="(455,215)" name="Text">
       <a name="text" val="Q* = In + Q"/>
     </comp>
-    <comp lib="8" loc="(495,352)" name="Text">
+    <comp lib="8" loc="(495,350)" name="Text">
       <a name="text" val="T = Q"/>
     </comp>
-    <comp lib="8" loc="(517,369)" name="Text">
+    <comp lib="8" loc="(515,365)" name="Text">
       <a name="text" val="Q* = E'Q + EQ'"/>
     </comp>
     <wire from="(120,210)" to="(120,270)"/>
@@ -173,5 +173,119 @@
     <wire from="(60,440)" to="(140,440)"/>
     <wire from="(60,50)" to="(130,50)"/>
     <wire from="(60,90)" to="(130,90)"/>
+  </circuit>
+  <circuit name="figure_1">
+    <a name="appearance" val="logisim_evolution"/>
+    <a name="circuit" val="figure_1"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1.0"/>
+    <comp lib="0" loc="(100,110)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+    </comp>
+    <comp lib="0" loc="(100,180)" name="Clock">
+      <a name="appearance" val="NewPins"/>
+    </comp>
+    <comp lib="0" loc="(350,140)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Shot"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="1" loc="(310,130)" name="OR Gate"/>
+    <comp lib="4" loc="(180,130)" name="D Flip-Flop">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp lib="8" loc="(204,93)" name="Text">
+      <a name="text" val="Mealy Device"/>
+    </comp>
+    <comp lib="8" loc="(485,130)" name="Text">
+      <a name="text" val="Shot = In + Q"/>
+    </comp>
+    <comp lib="8" loc="(495,145)" name="Text">
+      <a name="text" val="Q* = In + Q"/>
+    </comp>
+    <comp lib="8" loc="(70,95)" name="Text">
+      <a name="text" val="In"/>
+    </comp>
+    <wire from="(100,110)" to="(260,110)"/>
+    <wire from="(100,180)" to="(170,180)"/>
+    <wire from="(160,140)" to="(160,200)"/>
+    <wire from="(160,140)" to="(170,140)"/>
+    <wire from="(160,200)" to="(340,200)"/>
+    <wire from="(230,140)" to="(260,140)"/>
+    <wire from="(260,140)" to="(260,150)"/>
+    <wire from="(310,130)" to="(340,130)"/>
+    <wire from="(340,130)" to="(340,140)"/>
+    <wire from="(340,140)" to="(340,200)"/>
+    <wire from="(340,140)" to="(350,140)"/>
+  </circuit>
+  <circuit name="figure_2">
+    <a name="appearance" val="logisim_evolution"/>
+    <a name="circuit" val="figure_2"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1.0"/>
+    <comp lib="0" loc="(440,160)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(90,180)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+    </comp>
+    <comp lib="0" loc="(90,250)" name="Clock">
+      <a name="appearance" val="NewPins"/>
+    </comp>
+    <comp lib="1" loc="(300,170)" name="NOT Gate"/>
+    <comp lib="1" loc="(360,190)" name="AND Gate"/>
+    <comp lib="1" loc="(360,240)" name="AND Gate"/>
+    <comp lib="1" loc="(450,210)" name="OR Gate"/>
+    <comp lib="4" loc="(180,200)" name="D Flip-Flop">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp lib="8" loc="(195,135)" name="Text">
+      <a name="text" val="Moore Device"/>
+    </comp>
+    <comp lib="8" loc="(455,145)" name="Text">
+      <a name="text" val="T"/>
+    </comp>
+    <comp lib="8" loc="(525,160)" name="Text">
+      <a name="text" val="T = Q"/>
+    </comp>
+    <comp lib="8" loc="(548,178)" name="Text">
+      <a name="text" val="Q* = E'Q + EQ'"/>
+    </comp>
+    <comp lib="8" loc="(60,165)" name="Text">
+      <a name="text" val="E"/>
+    </comp>
+    <wire from="(150,210)" to="(150,310)"/>
+    <wire from="(150,210)" to="(170,210)"/>
+    <wire from="(150,310)" to="(460,310)"/>
+    <wire from="(230,210)" to="(250,210)"/>
+    <wire from="(230,250)" to="(250,250)"/>
+    <wire from="(240,180)" to="(240,220)"/>
+    <wire from="(240,180)" to="(260,180)"/>
+    <wire from="(240,220)" to="(310,220)"/>
+    <wire from="(250,160)" to="(250,210)"/>
+    <wire from="(250,160)" to="(440,160)"/>
+    <wire from="(250,210)" to="(310,210)"/>
+    <wire from="(250,250)" to="(250,260)"/>
+    <wire from="(250,260)" to="(310,260)"/>
+    <wire from="(260,170)" to="(260,180)"/>
+    <wire from="(260,170)" to="(270,170)"/>
+    <wire from="(300,170)" to="(310,170)"/>
+    <wire from="(360,190)" to="(400,190)"/>
+    <wire from="(360,240)" to="(380,240)"/>
+    <wire from="(380,230)" to="(380,240)"/>
+    <wire from="(380,230)" to="(400,230)"/>
+    <wire from="(450,210)" to="(460,210)"/>
+    <wire from="(460,210)" to="(460,310)"/>
+    <wire from="(90,180)" to="(240,180)"/>
+    <wire from="(90,250)" to="(170,250)"/>
+  </circuit>
+  <circuit name="figure_3">
+    <a name="appearance" val="logisim_evolution"/>
+    <a name="circuit" val="figure_3"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1.0"/>
   </circuit>
 </project>
