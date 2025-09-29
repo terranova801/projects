@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Base directory
+BASE="/media/shared/git"
+
+# Function to print usage
+usage() {
+    echo "Usage: goto [projects|vault|ceg]"
+    exit 1
+}
+
+# Make sure the user passed a directory name
+if [ -z "$1" ]; then
+    usage
+fi
+
+case "$1" in
+    projects)
+        cd "$BASE/projects" || { echo "❌ Failed to cd to projects"; exit 1; }
+        ;;
+    vault)
+        cd "$BASE/vault" || { echo "❌ Failed to cd to vault"; exit 1; }
+        ;;
+    ceg)
+        cd "$BASE/ceg2350f25-terranova801" || { echo "❌ Failed to cd to ceg"; exit 1; }
+        ;;
+    *)
+        echo "❌ Invalid option: $1"
+        usage
+        ;;
+esac
+
+# Launch a new shell so you stay in that directory
+exec $SHELL

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+BASE_DIR="/media/shared/git"
+COMMIT_MSG="Auto commit: $(date +'%Y-%m-%d %H:%M:%S')"
+
+for dir in "$BASE_DIR"/*; do
+    if [ -d "$dir/.git" ]; then
+        echo "🔹 Pushing changes in: $dir"
+        cd "$dir" || continue
+
+        # Stage and commit only if there are changes
+        if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "$COMMIT_MSG"
+            git push
+            echo "✅ Changes pushed in $dir"
+        else
+            echo "No changes in $dir"
+        fi
+        echo "---------------------------------------"
+    fi
+done
+
+echo "✅ All repositories processed!"

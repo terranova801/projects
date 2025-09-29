@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Base directory
+BASE_DIR="/media/shared/git"
+
+# Loop through each folder in the base directory
+for dir in "$BASE_DIR"/*; do
+    if [ -d "$dir/.git" ]; then
+        echo "🔹 Pulling updates in: $dir"
+        cd "$dir" || continue
+        git pull
+        echo "---------------------------------------"
+    else
+        echo "Skipping $dir (not a git repo)"
+    fi
+done
