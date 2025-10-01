@@ -36,7 +36,7 @@ public class LinkedList {
 		}
 		//Move through list to second to last position
 		Node traverse = head;
-		while (traverse.next != tail) {
+		while (traverse.next != tail) {	//moves until next Node is tail node
 			traverse = traverse.next;
 		}
 		return traverse.item;	//returns second to last item value
@@ -74,4 +74,5 @@ public class LinkedList {
 		}
 	}
 }
+
 
