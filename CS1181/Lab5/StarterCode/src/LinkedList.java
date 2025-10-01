@@ -31,18 +31,36 @@ public class LinkedList {
 	
 	
 	public String getPenultimate() {
-	    // TODO fix me
-	    return "Not Implemented";
+	    if (head == null || head.next == null) {	//checks first and second positions
+			return null;
+		}
+		//Move through list to second to last position
+		Node traverse = head;
+		while (traverse.next != tail) {
+			traverse = traverse.next;
+		}
+		return traverse.item;	//returns second to last item value
+		
+		// TODO fix me
+	    //return "Not Implemented";
 	}
 
 	//good to go
+	//fixed, returns null now if head item doesn't exist
 	public String getFirst() {
-	  return head.item;
+	  if (head == null) {
+		return null;
+	  }
+		return head.item;
 	}
 
 	//also good
+	//fixed, returns null now if tail item doesn't exist
 	public String getLast() {
-	    return tail.item;
+	    if (tail == null) {
+			return null;
+		}
+		return tail.item;
 	}
 
 	
@@ -56,3 +74,4 @@ public class LinkedList {
 		}
 	}
 }
+
