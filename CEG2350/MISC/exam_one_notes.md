@@ -240,5 +240,80 @@ COMMON PATHS & CONFIG
   ~/.ssh                          → SSH keys, configs
 
 -------------------------------------------------------
+REGULAR EXPRESSIONS CHEAT SHEET
+-------------------------------------------------------
+
+# Basic Concepts
+.        → Matches any single character (except newline)
+*        → Matches 0 or more occurrences of previous char/pattern
++        → Matches 1 or more (use with grep -E)
+?        → Matches 0 or 1 (use with grep -E)
+^        → Anchors match to start of line
+$        → Anchors match to end of line
+[abc]    → Matches any single character a, b, or c
+[^abc]   → Matches any single character EXCEPT a, b, or c
+[a-z]    → Range (any lowercase letter)
+[0-9]    → Range (any digit)
+()       → Groups patterns together (use with grep -E)
+|        → OR operator between alternatives (use with grep -E)
+{n}      → Exactly n occurrences (grep -E)
+{n,}     → At least n occurrences (grep -E)
+{n,m}    → Between n and m occurrences (grep -E)
+\        → Escape special meaning (literal match)
+
+# Common Anchors and Classes
+^word        → lines STARTING with "word"
+word$        → lines ENDING with "word"
+^[0-9]       → lines starting with a digit
+[[:alpha:]]  → any alphabetic character
+[[:digit:]]  → any numeric character (0–9)
+[[:alnum:]]  → any alphanumeric character
+[[:space:]]  → space, tab, or newline
+[[:upper:]]  → uppercase letter
+[[:lower:]]  → lowercase letter
+[[:punct:]]  → punctuation character
+
+# Examples
+grep "^root" /etc/passwd
+ → lines starting with 'root'
+
+grep "bash$" /etc/passwd
+ → lines ending with 'bash'
+
+grep "[0-9]" file.txt
+ → any line containing at least one digit
+
+grep -E "^[A-Z][a-z]+" names.txt
+ → lines starting with capital letter followed by lowercase letters
+
+grep -E "(error|fail|fatal)" log.txt
+ → matches any of those words (OR)
+
+grep -E "[0-9]{3}-[0-9]{2}-[0-9]{4}" data.txt
+ → matches social security–like pattern (###-##-####)
+
+grep -E "^[[:alnum:]_]+@[[:alnum:].]+$" users.txt
+ → simple email pattern (username@domain)
+
+# grep Options Reference
+grep -i pattern file       → ignore case
+grep -n pattern file       → show line numbers
+grep -v pattern file       → invert match (show lines NOT matching)
+grep -r pattern dir/       → recursive search in directory
+grep -E pattern file       → use extended regex (Egrep)
+grep -o pattern file       → print only the matching part of each line
+grep -c pattern file       → count matches
+grep -l pattern *          → list filenames with matches
+grep -L pattern *          → list filenames with NO matches
+
+# Practice Patterns
+".*error.*"         → any line containing "error"
+"^[A-Z].*\.$"       → lines starting with capital and ending with a period
+"^[0-9]\{3\}$"      → exactly three digits (basic grep)
+"foo\|bar"          → match "foo" or "bar" (use -E for |)
+"^$"                → blank (empty) lines
+"[^0-9]"            → lines containing a non-digit
+
+-------------------------------------------------------
 END OF CHEAT SHEET
 -------------------------------------------------------
