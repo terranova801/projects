@@ -121,4 +121,4 @@ And code blocks look very professional
 ## Citations
 
 To add citations, provide the site and a summary of what it assisted you with.  If generative AI was used, include which generative AI system was used and what prompt(s) you fed it.  Generative AI may not write your script for you, only assist with component and how to type questions.
-
+[Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/)
