@@ -93,10 +93,30 @@ Will run the script.
 
 ### Examples
 
+#### Setting up a symbolic link
+
 ```
+./dotinstall -s
+```
+Output:
+    If you currently have no .bash_aliases file:
+    ```
+    No current alias in "Your_home_directory"
+    *Sets up new alias*
+    Alias created
+    ```
+    If you wish to override your current .bash_aliases file:
+     
+     ```
+     .bash_aliases already exists in "Your_home_directory"
+     Continue setup (y/n) | Enter "y" if you wish to override your current .bash_aliases file
+     *Creates new symbolic link for .bash_aliases*
+     New alias link established
+     ```
+   
 By using the triple quotes, you can enclose a block of code
 And code blocks look very professional
-```
+
 
 ## Citations
 
