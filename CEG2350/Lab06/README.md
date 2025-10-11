@@ -37,14 +37,59 @@ your GitHub repository
 3. The ability to verify that an alias that a user is trying to add will function as intended before appending the file.
 
 ## Part 4 - `dotinstall` Usage Guide
-
+This is a script that allows a user to easily manage aliases that are used in the linux shell. The script focuses on the .bash_aliases file, which is responsible for shortcuts the user wants for more complicated tasks. Key features of this script include:
+    - Having a master .bash_aliases file within the git repository which allows for easy copying/implementation onto other PC's
+    - The ability to add or remove aliases with ease
+    - No need to directly interface with text files
 
 ### `.bash_aliases`
-Describe your script in plain English, nothing too technical.  Think about this as describing what you made over the dinner table.
+The master .bash_aliases file contains a few basic alias entries:
+```
+# Shortcut to CEG directory
+alias ceg="cd /home/ubuntu/ceg2350f25-terranova801"
+
+# Cowsay piped command
+alias cowquote='fortune | cowsay'
+
+# Another cow with a dragon
+alias mootivation='fortune | cowsay -f dragon-and-cow'
+
+# One more cow for good measure 
+alias lolcow='fortune -a | cowsay -f vader'
+
+# Screensaver
+alias relax='asciiquarium'
+
+# Better cat commands 
+alias kitty='lolcat -a -t'
+
+# Launch dotinstall
+alias dotinstall='./dotinstall'
+```
+
 
 ### `dotinstall`
-
-Describe your script in plain English, nothing too technical.  Think about this as describing what you made over the dinner table.
+The script can be ran in shell using: 
+```
+./dotinstall -h
+```
+or 
+```
+bash dotinstall -h
+```
+This will display the help section, where a user can find details about the functions of the script:
+```
+Usage: dotinstall [-OPTION] [ARG]
+  -s setup      - attempts to create a symbolic link .bash_aliases file to user's home directory
+  -d disconnect - removes symbolic link
+  -a append     - adds a new alias to .bash_aliases file
+  -r remove     - removes an alias from .bash_aliases file
+```
+After .bash_aliases is setup:
+```
+dotinstall [-OPTION] [ARG]
+```
+Will run the script.
 
 ### Examples
 
