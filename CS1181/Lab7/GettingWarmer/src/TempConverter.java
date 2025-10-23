@@ -44,27 +44,24 @@ public class TempConverter extends JFrame {
                     celsiusField.setText(String.format("%.2f", celsius));
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(
-                        null,
-                        "Please enter a valid number for Fahrenheit.",
-                        "Invalid Input",
-                        JOptionPane.ERROR_MESSAGE
-                    );
+                            null,
+                            "Please enter a valid number for Fahrenheit.",
+                            "Invalid Input",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
         // Frame settings
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 150);
+        setSize(800, 350);
         setLocationRelativeTo(null); // Center the window
         setVisible(true);
     }
 
     /**
      * Main method to run the GUI
+     * 
      * @param args command-line arguments
      */
-    public static void main(String[] args) {
-        new FahrenheitToCelsiusGUI();
-    }
 }
