@@ -7,9 +7,11 @@ public class TempConverter extends JFrame {
     private JTextField fahrenheitField;
     private JTextField celsiusField;
     private JButton convertButton;
+    private JLabel fahrenheit;
+    private JLabel celsius;
 
     /**
-     * Constructor to set up the GUI
+     * constructor
      */
     public TempConverter() {
         super("Fahrenheit to Celsius Converter");
@@ -18,12 +20,14 @@ public class TempConverter extends JFrame {
         fahrenheitField = new JTextField(10);
         celsiusField = new JTextField(10);
         convertButton = new JButton("Convert");
+        fahrenheit = new JLabel("Fahrenheit:");
+        celsius = new JLabel("Celsius:");
 
         // Create panel and layout
-        JPanel panel = new JPanel(new GridLayout(3, 2, 5, 5));
-        panel.add(new JLabel("Fahrenheit:"));
+        JPanel panel = new JPanel(new GridLayout(3, 2));
+        panel.add(fahrenheit);
         panel.add(fahrenheitField);
-        panel.add(new JLabel("Celsius:"));
+        panel.add(celsius);
         panel.add(celsiusField);
         panel.add(convertButton);
 
@@ -32,17 +36,19 @@ public class TempConverter extends JFrame {
 
         // Add ActionListener to button
         convertButton.addActionListener(new ActionListener() {
-            /**
-             * Converts Fahrenheit to Celsius when button is pressed
-             * Handles invalid input gracefully
-             */
             @Override
+            /**
+             * Action listener triggered by the convert button
+             * Takes input from farhenheitField as double and the calculates its equivalency in celsius
+             * Prints the result to the celsius textfield
+             */
             public void actionPerformed(ActionEvent e) {
                 try {
                     double fahrenheit = Double.parseDouble(fahrenheitField.getText());
                     double celsius = (5.0 / 9.0) * (fahrenheit - 32);
                     celsiusField.setText(String.format("%.2f", celsius));
                 } catch (NumberFormatException ex) {
+                    // https://stackoverflow.com/questions/21664242/java-swing-gui-try-catch-block
                     JOptionPane.showMessageDialog(
                             null,
                             "Please enter a valid number for Fahrenheit.",
@@ -55,13 +61,7 @@ public class TempConverter extends JFrame {
         // Frame settings
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 350);
-        setLocationRelativeTo(null); // Center the window
         setVisible(true);
     }
 
-    /**
-     * Main method to run the GUI
-     * 
-     * @param args command-line arguments
-     */
 }

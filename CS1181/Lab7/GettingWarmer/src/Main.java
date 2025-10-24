@@ -16,6 +16,6 @@ public class Main {
         // panel.add(label);
         // gui.add(panel);
 
-        new TempConverter();
+        new TempConverter(); //calls constructor for a new tempconverter instance
     }
 }
