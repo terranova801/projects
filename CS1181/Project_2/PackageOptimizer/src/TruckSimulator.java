@@ -29,7 +29,7 @@ public class TruckSimulator {
     }
 
     private enum eventType {
-        TRACK_CROSSING, TRAIN_ENDING,
+        TRAIN_CROSSING, TRAIN_ENDING,
         TRUCK_START, TRUCK_AT_CROSSING, TRUCK_CROSS, TRUCK_END
     }
 
@@ -95,21 +95,21 @@ public class TruckSimulator {
         // reset
         simTime = 0;
         eventPQ.clear();
-        cross.isBlocked = false;
-        cross.waitingFifo.clear();
-        cross.nextFreeTick = 0;
+        crosser.isBlocked = false;
+        crosser.trafficLine.clear();
+        crosser.nextFreeTick = 0;
 
         // 1) schedule trains
         for (int[] blk : trainBlocks) {
             int start = toTicks(blk[0]);
             int end   = toTicks(blk[0] + blk[1]);
-            enqueue(new event(start, category.TRAIN, eventType.TRAIN_BLOCK_START, null, simTime));
-            enqueue(new event(end,   category.TRAIN, eventType.TRAIN_BLOCK_END,   null, simTime));
+            enqueue(new event(start, category.TRAIN, eventType.TRAIN_CROSSING, null, simTime));
+            enqueue(new event(end,   category.TRAIN, eventType.TRAIN_ENDING,   null, simTime));
         }
 
         // 2) schedule truck starts (id = 1..truckCount)
         for (int id = 1; id <= truckCount; id++) {
-            int start = (id - 1) * headwayTicks;
+            int start = (id - 1) * truckSpacingTicks;
             enqueue(new event(start, category.TRUCK, eventType.TRUCK_START, id, simTime));
         }
 
@@ -121,28 +121,28 @@ public class TruckSimulator {
 
             switch (e.type) {
 
-                case TRAIN_BLOCK_START -> {
-                    cross.isBlocked = true;
+                case TRAIN_CROSSING -> {
+                    crosser.isBlocked = true;
                     if (printLog) log("%.1f: TRAIN blocks crossing", toMinutes(now));
                 }
 
-                case TRAIN_BLOCK_END -> {
-                    cross.isBlocked = false;
+                case TRAIN_ENDING -> {
+                    crosser.isBlocked = false;
                     if (printLog) log("%.1f: TRAIN clears crossing", toMinutes(now));
 
-                    // release queued trucks in a "burst": +1, +2, +3 minutes
+                    // release queued trucks in FIFO order
                     int k = 0;
-                    while (!cross.waitingFifo.isEmpty()) {
-                        int tid = cross.waitingFifo.removeFirst();
+                    while (!crosser.trafficLine.isEmpty()) {
+                        int tid = crosser.trafficLine.remove();
                         k++;
-                        int crossStart = now + k * startupTicks; // 1 min per truck
+                        int crossStart = now + k * startupDelayTicks; // 1 min per truck
                         enqueue(new event(crossStart, category.TRUCK, eventType.TRUCK_CROSS, tid, now));
                     }
-                    cross.nextFreeTick = now + k * startupTicks;
+                    crosser.nextFreeTick = now + k * startupDelayTicks;
                 }
 
                 case TRUCK_START -> {
-                    int tid = e.truckId;
+                    int tid = e.truckID;
                     if (printLog) {
                         log("%.1f: TRUCK %d begins journey", toMinutes(now), tid);
                         log("%.1f: Truck is driving", toMinutes(now));
@@ -156,55 +156,51 @@ public class TruckSimulator {
 
                     // must wait if train blocking, if someone already in line,
                     // or if we've reserved a next slot in the future
-                    boolean mustQueue = cross.isBlocked
-                                     || !cross.waitingFifo.isEmpty()
-                                     || now < cross.nextFreeTick;
+                    boolean mustQueue = crosser.isBlocked || !crosser.trafficLine.isEmpty() || now < crosser.nextFreeTick;
 
                     if (mustQueue) {
-                        cross.waitingFifo.addLast(tid);
+                        crosser.trafficLine.add(tid);
                         if (printLog) log("%.1f: TRUCK %d waits at crossing", toMinutes(now), tid);
                     } else {
                         // immediate cross (never stopped → no 1-minute penalty)
-                        int crossStart = Math.max(now, cross.nextFreeTick);
+                        int crossStart = Math.max(now, crosser.nextFreeTick);
                         enqueue(new event(crossStart, category.TRUCK, eventType.TRUCK_CROSS, tid, now));
                     }
                 }
 
                 case TRUCK_CROSS -> {
-                    int tid = e.truckId;
+                    int tid = e.truckID;
                     if (printLog) {
                         log("%.1f: TRUCK %d crosses crossing", toMinutes(now), tid);
                         log("%.1f: Truck is driving", toMinutes(now));
                     }
-                    int end = now + postCrossTicks;
+                    int end = now + afterCrossingTicks;
                     enqueue(new event(end, category.TRUCK, eventType.TRUCK_END, tid, now));
 
                     // if you later model a crossing duration, add it to nextFreeTick here
-                    cross.nextFreeTick = now;
+                    crosser.nextFreeTick = now;
                 }
 
                 case TRUCK_END -> {
-                    int tid = e.truckId;
+                    int tid = e.truckID;
                     if (printLog) log("%.1f: TRUCK %d completes delivery", toMinutes(now), tid);
                 }
             }
         }
     }
 
-    /* =========================
-       helpers
-       ========================= */
-    private void enqueue(event e) { eventPQ.add(e); }
+ 
+    private void enqueue(event e) { eventQueue.add(e); }
 
     private void log(String fmt, Object... args) {
-        System.out.println(String.format(fmt, args));
+      //  System.out.println(String.format(fmt, args));
     }
 }    
 
         
 
         
-    }
+    
 
     
 
