@@ -14,7 +14,6 @@ public class Main {
         final int truckSpeed = 30; // unitspermin
         final int truckCap = 10; // packages
         final int truckInterval = 15; // minutes
-        final int truckStartupDelay = 1;
 
         double calcQuota;
         int droneQuota;
@@ -88,3 +87,4 @@ public class Main {
     }
 
 }
+
