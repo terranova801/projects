@@ -31,13 +31,16 @@ public class Main {
         Scanner scnr = new Scanner(System.in);
         System.out.println("Enter percentage of deliveries to make by drone (0-100)");
 
-        userInput = scnr.nextInt();
-        if (userInput > 100) {
-            userInput = 100;
-        } else if (userInput < 0) {
-            userInput = 0;
-        }
-        percentByDrone = ((double) userInput) / 100;
+        // userInput = scnr.nextInt();
+        // if (userInput > 100) {
+        //     userInput = 100;
+        // } else if (userInput < 0) {
+        //     userInput = 0;
+        // }
+
+
+        for (int i = 0; i <= 100; i++) {
+        percentByDrone = ((double) i) / 100;
 
         calcQuota = percentByDrone * packageQuota;
         droneQuota = (int)calcQuota;
@@ -96,7 +99,7 @@ public class Main {
         }
 
         scnr.close();
-    }
+    }}
 
     /**
      * Converted minutes into hrs and minutes

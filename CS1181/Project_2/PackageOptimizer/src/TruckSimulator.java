@@ -75,7 +75,7 @@ public class TruckSimulator {
         Queue<Integer> trafficLine = new Queue<>();
         int nextFreeTick = 0; //double check me
     }
-    // Runtime fields
+    // runtime fields
     private final PriorityQueue<event> eventQueue = new PriorityQueue<>(eventOrder);
     private final crossingSim crosser = new crossingSim();
 
@@ -152,7 +152,7 @@ public class TruckSimulator {
                 }
 
                 case TRUCK_AT_CROSSING -> {
-                    int tid = e.truckId;
+                    int tid = e.truckID;
 
                     // must wait if train blocking, if someone already in line,
                     // or if we've reserved a next slot in the future
@@ -162,7 +162,7 @@ public class TruckSimulator {
                         crosser.trafficLine.add(tid);
                         if (printLog) log("%.1f: TRUCK %d waits at crossing", toMinutes(now), tid);
                     } else {
-                        // immediate cross (never stopped → no 1-minute penalty)
+                        // immediate cross 
                         int crossStart = Math.max(now, crosser.nextFreeTick);
                         enqueue(new event(crossStart, category.TRUCK, eventType.TRUCK_CROSS, tid, now));
                     }
@@ -176,9 +176,6 @@ public class TruckSimulator {
                     }
                     int end = now + afterCrossingTicks;
                     enqueue(new event(end, category.TRUCK, eventType.TRUCK_END, tid, now));
-
-                    // if you later model a crossing duration, add it to nextFreeTick here
-                    crosser.nextFreeTick = now;
                 }
 
                 case TRUCK_END -> {

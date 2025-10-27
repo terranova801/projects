@@ -62,7 +62,7 @@ public class TruckSim {
     }
 
     // comparator: time asc, TRAIN before TRUCK at same time,
-    // TRUCK_AT_CROSSING before TRUCK_CROSS at same tick, fallback by truckId
+    // TRUCK_AT_CROSSING before TRUCK_CROSS at same tick, fallback by truckID
     private static final Comparator<Event> EVENT_ORDER = (a, b) -> {
         if (a.timeTicks != b.timeTicks) return Integer.compare(a.timeTicks, b.timeTicks);
         if (a.category != b.category) return (a.category == Category.TRAIN) ? -1 : 1;
@@ -71,9 +71,7 @@ public class TruckSim {
                 if (a.type == EventType.TRUCK_AT_CROSSING && b.type == EventType.TRUCK_CROSS) return -1;
                 if (a.type == EventType.TRUCK_CROSS && b.type == EventType.TRUCK_AT_CROSSING) return 1;
             }
-            int ta = (a.truckId == null ? -1 : a.truckId);
-            int tb = (b.truckId == null ? -1 : b.truckId);
-            return Integer.compare(ta, tb);
+           
         }
         return 0;
     };
@@ -143,9 +141,6 @@ public class TruckSim {
             atomicSimTime.set(e.timeTicks);
             int now = atomicSimTime.get();
 
-            // pendingEventTime (in ticks) - stored/available if you want to use it later
-            int pendingEventTime = now - e.enqueuedAtTicks;
-
             switch (e.type) {
                 case TRAIN_START -> {
                     isBlocked = true;
@@ -155,7 +150,7 @@ public class TruckSim {
                 case TRAIN_END -> {
                     isBlocked = false;
                     if (printLog) System.out.printf("%s: TRAIN clears crossing%n", fmtMinutes(now));
-                    // release all waiting trucks in FIFO order: first at now+1min, next at now+2min ...
+                    // release all waiting trucks in FIFO order
                     int k = 0;
                     while (!waitingLine.isEmpty()) {
                         int tid = waitingLine.removeFirst();
