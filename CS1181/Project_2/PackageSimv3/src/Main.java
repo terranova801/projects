@@ -26,10 +26,15 @@ public class Main {
         int droneTotalTime = 0;
 
         double percentByDrone;
-        double userInput;
+        //double userInput;
+        double totalDelivTime;
+        double lowestDeliveryTotal = Double.MAX_VALUE;
+        double dronePercent = 0;
+        int droneCount = 0;
+       
 
-        Scanner scnr = new Scanner(System.in);
-        System.out.println("Enter percentage of deliveries to make by drone (0-100)");
+        // Scanner scnr = new Scanner(System.in);
+        // System.out.println("Enter percentage of deliveries to make by drone (0-100)");
 
         // userInput = scnr.nextInt();
         // if (userInput > 100) {
@@ -68,13 +73,21 @@ public class Main {
             System.out.println("train_schedule.txt error");
             return;
         }
+        
 
         // run truck simulation
+
+        System.out.println("\nRunning simulation #" + i);
+
         TruckSim truckSim = new TruckSim(deliveryDist, trackDist, truckSpeed, truckInterval, truckQuota, trainBlocks);
-        truckSim.run(true); // print timeline and events
+        truckSim.run(true); // print events
 
         // print truck stats
         truckSim.printTruckStats();
+       
+        
+        System.out.println("\nSimulation results with " + i + "% drone deliveries:");
+        System.out.println("Total drones used: " + droneQuota);
 
         if (droneQuota > 0) {
             droneSingleTime = (deliveryDist / droneSpeed); // in minutes
@@ -89,17 +102,38 @@ public class Main {
 
         // overall total
         int truckTotalTicks = truckSim.getTotalTicks();
-        double truckTotalMin = TruckSim.ticksToMinutes(truckTotalTicks);
-        System.out.printf("Truck delivery time: %.1f minutes%n", truckTotalMin);
+        double truckTotalTime = TruckSim.ticksToMinutes(truckTotalTicks);
+        String truckTotalConverted = minutesConverted((int)truckTotalTime);
+        System.out.println("Total truck delivery time: " +  truckTotalConverted);
 
-        if (droneQuota > 0) {
-            System.out.printf("Overall total (max): %.1f minutes%n", Math.max(truckTotalMin, (double)(droneTotalTime)));
-        } else {
-            System.out.printf("Overall total (max): %.1f minutes%n", truckTotalMin);
+        if (droneQuota > 0 && droneQuota < 1500) {
+            totalDelivTime = Math.max(droneTotalTime, truckTotalTime);            
+        } else if (droneQuota >= 1500) {
+            totalDelivTime = droneTotalTime;
+        }
+        else {
+            totalDelivTime = truckTotalTime;
         }
 
-        scnr.close();
-    }}
+
+        if (lowestDeliveryTotal > totalDelivTime) {
+            lowestDeliveryTotal = totalDelivTime;
+            droneCount = droneQuota; 
+        }
+        String totalTimeConverted = minutesConverted((int)totalDelivTime);
+        System.out.println("Total Delivery Time for Current Sim: " + totalTimeConverted);
+    
+        }
+        dronePercent = ((double)droneCount / 1500) * 100; //converts decimal to percent value
+        String lowestTime = minutesConverted((int)lowestDeliveryTotal); //prefer to use a map or list for this but this method works for now
+        System.out.println("");
+        // System.out.println("Most optimized delivery time (lowest): " + ); 
+        System.out.println("Lowest simulated delivery time: " + lowestTime); //Prints lowest overall simulation time
+        System.out.println("By completing " + droneCount + "(" + dronePercent + "%) deliveries with drones"); // prints accompanying drone stats
+
+
+        //scnr.close();
+    }
 
     /**
      * Converted minutes into hrs and minutes
