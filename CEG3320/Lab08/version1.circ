@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project source="3.9.0" version="1.0">
-  This file is intended to be loaded by Logisim-evolution v3.9.0(https://github.com/logisim-evolution/).
+<project source="4.0.0" version="1.0">
+  This file is intended to be loaded by Logisim-evolution v4.0.0(https://github.com/logisim-evolution/).
 
   <lib desc="#Wiring" name="0">
     <tool name="Pin">
@@ -18,7 +18,7 @@
   <lib desc="#BFH-Praktika" name="9"/>
   <lib desc="#Input/Output-Extra" name="10"/>
   <lib desc="#Soc" name="11"/>
-  <main name="main"/>
+  <main name="calc"/>
   <options>
     <a name="gateUndefined" val="ignore"/>
     <a name="simlimit" val="1000"/>
@@ -38,7 +38,7 @@
     <tool lib="0" name="Pin"/>
     <tool lib="0" name="Pin">
       <a name="facing" val="west"/>
-      <a name="output" val="true"/>
+      <a name="type" val="output"/>
     </tool>
     <sep/>
     <tool lib="1" name="NOT Gate"/>
@@ -51,71 +51,14 @@
     <tool lib="4" name="D Flip-Flop"/>
     <tool lib="4" name="Register"/>
   </toolbar>
-  <circuit name="main">
-    <a name="appearance" val="logisim_evolution"/>
-    <a name="circuit" val="main"/>
-    <a name="circuitnamedboxfixedsize" val="true"/>
-    <a name="simulationFrequency" val="1.0"/>
-    <comp lib="0" loc="(120,40)" name="Pin">
-      <a name="appearance" val="NewPins"/>
-      <a name="label" val="Value"/>
-      <a name="width" val="4"/>
-    </comp>
-    <comp lib="0" loc="(500,90)" name="Pin">
-      <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
-    </comp>
-    <comp lib="0" loc="(80,330)" name="Pin">
-      <a name="appearance" val="NewPins"/>
-      <a name="label" val="GO"/>
-    </comp>
-    <comp lib="0" loc="(80,370)" name="Clock"/>
-    <comp lib="0" loc="(90,80)" name="Pin">
-      <a name="appearance" val="NewPins"/>
-      <a name="label" val="FN"/>
-      <a name="width" val="2"/>
-    </comp>
-    <comp lib="1" loc="(480,350)" name="AND Gate">
-      <a name="size" val="30"/>
-    </comp>
-    <comp lib="4" loc="(160,320)" name="D Flip-Flop">
-      <a name="appearance" val="logisim_evolution"/>
-    </comp>
-    <comp lib="4" loc="(350,300)" name="Register">
-      <a name="appearance" val="logisim_evolution"/>
-      <a name="width" val="4"/>
-    </comp>
-    <wire from="(140,310)" to="(140,330)"/>
-    <wire from="(140,310)" to="(330,310)"/>
-    <wire from="(140,330)" to="(150,330)"/>
-    <wire from="(150,370)" to="(150,390)"/>
-    <wire from="(150,390)" to="(330,390)"/>
-    <wire from="(210,370)" to="(240,370)"/>
-    <wire from="(240,360)" to="(240,370)"/>
-    <wire from="(240,360)" to="(340,360)"/>
-    <wire from="(330,280)" to="(330,310)"/>
-    <wire from="(330,280)" to="(450,280)"/>
-    <wire from="(330,370)" to="(330,390)"/>
-    <wire from="(330,370)" to="(350,370)"/>
-    <wire from="(340,290)" to="(340,350)"/>
-    <wire from="(340,290)" to="(490,290)"/>
-    <wire from="(340,350)" to="(350,350)"/>
-    <wire from="(340,360)" to="(340,400)"/>
-    <wire from="(340,400)" to="(450,400)"/>
-    <wire from="(450,280)" to="(450,340)"/>
-    <wire from="(450,360)" to="(450,400)"/>
-    <wire from="(480,350)" to="(490,350)"/>
-    <wire from="(490,290)" to="(490,350)"/>
-    <wire from="(80,330)" to="(140,330)"/>
-    <wire from="(80,370)" to="(150,370)"/>
-  </circuit>
   <circuit name="calc">
     <a name="appearance" val="logisim_evolution"/>
     <a name="circuit" val="calc"/>
     <a name="circuitnamedboxfixedsize" val="true"/>
     <a name="simulationFrequency" val="1.0"/>
-    <comp lib="0" loc="(150,340)" name="Clock"/>
+    <comp lib="0" loc="(150,340)" name="Clock">
+      <a name="appearance" val="classic"/>
+    </comp>
     <comp lib="0" loc="(170,150)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="label" val="GO"/>
@@ -133,8 +76,8 @@
     <comp lib="0" loc="(690,250)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
-      <a name="label" val="Result"/>
-      <a name="output" val="true"/>
+      <a name="label" val="OutValue"/>
+      <a name="type" val="output"/>
       <a name="width" val="4"/>
     </comp>
     <comp lib="1" loc="(480,330)" name="AND Gate">
