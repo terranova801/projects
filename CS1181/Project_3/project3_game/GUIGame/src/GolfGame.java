@@ -7,25 +7,33 @@ import java.util.Random;
 import java.util.Stack;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public class GolfGame {
 
     int holeNumber = 1; // Round number, golf games typically has 9 holes or rounds
     int numDecks = 2;
+    int playerTurn;
     // Tracking scores through holes
     int playerScore; // Player is the playable actor
-    int npcOneScore;
-    int npcTwoScore;
-    int npcThreeScore;
-
+    // int npcOneScore;
+    // int npcTwoScore;
+    // int npcThreeScore;
+    String npcOneName = "Tiger";
+    String npcTwoName = "Harold";
+    String npcThreeName = "Steve";
+    NPC npcOne;
+    NPC npcTwo;
+    NPC npcThree;
     // Tracks if player has gone out -> When all cards in players hand have been
     // turned over -> All hands must turn over after their next turn and hole/round
     // ends
     boolean playerOut = false;
-    boolean npcOneOut = false;
-    boolean npcTwoOut = false;
-    boolean npcThreeOut = false;
+    // boolean npcOneOut = false;
+    // boolean npcTwoOut = false;
+    // boolean npcThreeOut = false;
     boolean roundOver = false;
+    boolean startNextRound = true;
 
     // ArrayList used to initialize and shuffle new deck of cards
     ArrayList<Card> deck;
@@ -36,67 +44,40 @@ public class GolfGame {
     // Another stack is used for the discard/kitty
     Stack<Card> discard;
 
-    // utilize map to store the players cards and their position
     Map<Integer, Card> playerHand;
-    Map<Integer, Card> npcOneHand;
-    Map<Integer, Card> npcTwoHand;
-    Map<Integer, Card> npcThreeHand;
 
     // shuffler
     Random shuffle = new Random();
 
     // all GUI buttons, etc
-    
+    JFrame frame;
+    JPanel bottomPanel;
+    JPanel playerPanel; // players hand at botton of window
+    JPanel IOPanel;
+    JPanel tableCenter; // center of table where deck and discard piles exist
+    JPanel npcOnePanel; // npcOne hand on left side of window
+    JPanel npcTwoPanel; // npcTwo hand on top of window
+    JPanel npcThreePanel; // npcThree hand on right of window
+
     // table gui
     JButton deckButton;
     JButton kittyButton;
-
-    // player gui
-    JButton playerButtonOne;
-    JButton playerButtonTwo;
-    JButton playerButtonThree;
-    JButton playerButtonFour;
-    JButton playerButtonFive;
-    JButton playerButtonSix;
-
-    // misc gui
     JButton startNextButton;
     JButton endGameButton;
-   
-
-
-    // Class for tracking cards
-    private class Card {
-        String value;
-        String suite;
-        int position;
-
-        // constructor
-        Card(String value, String suite) {
-            this.value = value;
-            this.suite = suite;
-        }
-
-        // Card(String value, String suite, int position) {
-        // this.value = value;
-        // this.suite = suite;
-        // this.position = position;
-        // }
-        public void setPosition(int position) {
-            this.position = position;
-        }
-
-        @Override
-        public String toString() {
-            return value + "-" + suite;
-        }
-    }
+    JTextArea scoreBoard;
 
     GolfGame() {
         if (holeNumber <= 1) {
-            buildGame();
-            startGame();
-            holeNumber++;
+            npcOne = new NPC(npcOneName);
+            npcTwo = new NPC(npcTwoName);
+            npcThree = new NPC(npcThreeName);
+
+            if (startNextRound) {
+                startNextRound = false;
+                buildGame();
+                startGame();
+                holeNumber++;
+            }
         }
     }
 
@@ -109,8 +90,8 @@ public class GolfGame {
 
     public void startGame() {
         buildGUI();
-        chooseFaceUp();
-        beginRound();
+        //chooseFaceUp();
+        // beginRound();
     }
 
     public void freshDeck() {
@@ -174,17 +155,18 @@ public class GolfGame {
     public void dealCards() {
         // deal to player
         playerHand = new HashMap<Integer, Card>();
-        npcOneHand = new HashMap<Integer, Card>();
-        npcTwoHand = new HashMap<Integer, Card>();
-        npcThreeHand = new HashMap<Integer, Card>();
+
+        // npcOneHand = new HashMap<Integer, Card>();
+        // npcTwoHand = new HashMap<Integer, Card>();
+        // npcThreeHand = new HashMap<Integer, Card>();
 
         // iterates 6 times, each player receives 6 cards when dealing
-        for (int v = 1; v <= 6; v++) {
-            playerHand.put(v, playableDeck.pop()); // removes card from top of deck and adds it to players hand in
+        for (Integer v = 1; v <= 6; v++) {
+            playerHand.put(v, playableDeck.pop()); // removes card from top of deck and adds it to players hand,
                                                    // position dependent on the iteration count
-            npcOneHand.put(v, playableDeck.pop());
-            npcTwoHand.put(v, playableDeck.pop());
-            npcThreeHand.put(v, playableDeck.pop());
+            npcOne.addCard(v, playableDeck.pop());
+            npcTwo.addCard(v, playableDeck.pop());
+            npcThree.addCard(v, playableDeck.pop());
         }
         discard.push(playableDeck.pop());
 
@@ -192,13 +174,17 @@ public class GolfGame {
 
     }
 
-    public void chooseFaceUp() {
-        // need method for player to select card to flip
+    public void chooseFaceUp(Graphics g) {
+        String message = "Flip one card";
+        g.setFont(new Font("Arial", Font.PLAIN, 30));
+        g.setColor(Color.white);
+        g.drawString(message, 300, 300);
+
     }
 
     public void beginRound() {
-        int playerTurn = 0; // -> 0 for player / 1 for npcOne / 2 for npcTwo / 3 for npcThree | This is used
-                            // to determine who starts the round
+        playerTurn = 0; // -> 0 for player / 1 for npcOne / 2 for npcTwo / 3 for npcThree | This is used
+                        // to determine who starts the round
         if (holeNumber == 1 || holeNumber == 5 || holeNumber == 9) {
             playerTurn = 0;
         } else if (holeNumber == 2 || holeNumber == 6) {
@@ -208,98 +194,162 @@ public class GolfGame {
         } else if (holeNumber == 4 || holeNumber == 8) {
             playerTurn = 3;
         }
+    }
 
-        while (!roundOver) {
-            switch (playerTurn) {
-                // Players turn to go
-                case 0:
-                    playerTurn++;
-                    break;
+    public void turnLoop() {
 
-                // npcOne turn to go
-                case 1:
-                    playerTurn++;
-                    break;
+        if (roundOver)
+            return;
 
-                // npcTwo turn to go
-                case 2:
-                    playerTurn++;
-                    break;
+        switch (playerTurn) {
+            // Players turn to go
+            case 0:
 
-                // npcThree turn to go
-                case 3:
-                    playerTurn = 0; // returns count to zero to cycle back to Player
-                    break;
+                // fixme for turning over one card
+                // Card card = playerHand.get(k);
+                // JButton cardButton = new JButton();
+                // ImageIcon cardImage = new ImageIcon(card.getCardFile());
 
-            }
+                break;
+
+            // npcOne turn to go
+            case 1:
+                break;
+
+            // npcTwo turn to go
+            case 2:
+                break;
+
+            // npcThree turn to go
+            case 3:
+                break;
 
         }
+        playerTurn = (playerTurn + 1) % 4;
+
     }
 
     public void buildGUI() {
 
-        
-        int windowWidth = 800;
-        int windowHeight = 800;
+        int windowWidth = 1300;
+        int windowHeight = 1300;
 
-        int cardWidth = 100;
+        int cardWidth = 120;
         int cardHeight = (int) (cardWidth * 1.4);
 
         Color backGround = new Color(53, 101, 77);
 
+        frame = new JFrame("6 Card Golf");
+        bottomPanel = new JPanel(); // main panel that elements are added to
+        playerPanel = new JPanel(); // players hand at botton of window
+        IOPanel = new JPanel();
+        tableCenter = new JPanel(); // center of table where deck and discard piles exist
+        npcOnePanel = new JPanel(); // npcOne hand on left side of window
+        npcTwoPanel = new JPanel(); // npcTwo hand on top of window
+        npcThreePanel = new JPanel(); // npcThree hand on right of window
 
-        JFrame frame = new JFrame("6 Card Golf");
-        // JPanel gamePanel = new JPanel(); // main panel that elements are added to
-        JPanel tableCenter = new JPanel(); // center of table where deck and discard piles exist
-        JPanel playerPanel = new JPanel(); // players hand at botton of window
-        JPanel npcOnePanel = new JPanel(); // npcOne hand on left side of window
-        JPanel npcTwoPanel = new JPanel(); // npcTwo hand on top of window
-        JPanel npcThreePanel = new JPanel(); // npcThree hand on right of window
+        // setting up panels
 
-        frame.setVisible(true);
-        frame.setSize(windowWidth, windowHeight);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        tableCenter = new JPanel() {
+            @Override
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                chooseFaceUp(g);
 
-        // gamePanel.setLayout(new BorderLayout());
-        // gamePanel.setBackground(new Color(53, 101, 77));
-        // frame.add(gamePanel);
+            }
+        };
 
-        // panels for each player and table center
-        tableCenter.setLayout(new BorderLayout());
-        tableCenter.setBackground(backGround);
-        deckButton = new JButton();
-        kittyButton = new JButton();
-        
+        bottomPanel.setLayout(new BorderLayout());
+        bottomPanel.setBackground(new Color(53, 101, 77));
 
-        playerPanel.setLayout(new BorderLayout());
-        playerPanel.setBackground(backGround);
-        playerButtonOne = new JButton();
-        playerButtonTwo = new JButton();
-        playerButtonThree = new JButton();
-        playerButtonFour = new JButton();
-        playerButtonFive = new JButton();
-        playerButtonSix = new JButton();
-
+        IOPanel.setLayout(new GridLayout(2, 1));
+        IOPanel.setBackground(new Color(53, 101, 77));
         npcOnePanel.setLayout(new BorderLayout());
         npcOnePanel.setBackground(backGround);
-
-
 
         npcTwoPanel.setLayout(new BorderLayout());
         npcTwoPanel.setBackground(backGround);
 
-
         npcThreePanel.setLayout(new BorderLayout());
         npcThreePanel.setBackground(backGround);
 
+        // buttons
+        startNextButton = new JButton();
+        startNextButton.setText("Start next hole");
+        startNextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (roundOver) {
+                    startNextRound = true;
+                }
+            }
+        });
+
+        endGameButton = new JButton();
+        endGameButton.setText("End Game");
+        endGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // end game
+            }
+        });
+
+        IOPanel.add(startNextButton);
+        IOPanel.add(endGameButton);
+
+        // panels for each player and table center
+        // tableCenter.setLayout(new BorderLayout());
+        tableCenter.setBackground(backGround);
+        deckButton = new JButton();
+        kittyButton = new JButton();
+        scoreBoard = new JTextArea(11, 4);
+        scoreBoard.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        scoreBoard.setText("| Round |  YOU  | " + npcOneName + " | " + npcTwoName + " | " + npcThreeName
+                + " | \n ---------------");
+
+        tableCenter.add(deckButton);
+        tableCenter.add(kittyButton);
+
+        playerPanel.setLayout(new GridLayout(2, 3, 10, 10));
+        // playerPanel.setSize(300, 400);
+        playerPanel.setBackground(backGround);
+        for (int k = 1; k <= 6; k++) {
+
+            JButton cardButton = new JButton();
+            ImageIcon cardImage = new ImageIcon("./cards/BACK.png");
+            Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
+            cardImage = new ImageIcon(scaleDown);
+            cardButton.setIcon(cardImage);
+            cardButton.setBorderPainted(false);
+            cardButton.setContentAreaFilled(false);
+
+            cardButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+
+                    playerPanel.repaint();
+                }
+
+            });
+            playerPanel.add(cardButton);
+
+        }
+
+        bottomPanel.add(playerPanel, BorderLayout.CENTER);
+        bottomPanel.add(scoreBoard, BorderLayout.WEST);
+        bottomPanel.add(IOPanel, BorderLayout.EAST);
 
         frame.add(tableCenter, BorderLayout.CENTER);
-        frame.add(playerPanel, BorderLayout.SOUTH);
+        frame.add(bottomPanel, BorderLayout.SOUTH);
         frame.add(npcOnePanel, BorderLayout.WEST);
         frame.add(npcTwoPanel, BorderLayout.NORTH);
         frame.add(npcThreePanel, BorderLayout.EAST);
 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(windowWidth, windowHeight);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setVisible(true);
+
     }
+
 }
