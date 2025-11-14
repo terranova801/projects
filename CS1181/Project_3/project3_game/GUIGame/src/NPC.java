@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class NPC {
     String position;
@@ -9,7 +10,7 @@ public class NPC {
 
     Map<Integer, Card> hand;
     Map<Integer, Integer> score; // key is round number, value is round score
-
+    Random random = new Random();
     
     public NPC(String name) {
         this.name = name;
@@ -24,6 +25,10 @@ public class NPC {
     }
     public Card getCard(Integer cardSpot) {
         return hand.get(cardSpot);
+    }
+    // randomly flips card at beginning of game
+    public int pickFaceUp() {
+        return random.nextInt(6) + 1;
     }
 
 
