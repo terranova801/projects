@@ -14,24 +14,14 @@ public class GolfGame {
     int holeNumber = 1; // Round number, golf games typically has 9 holes or rounds
     int numDecks = 2;
     int playerTurn;
-    // Tracking scores through holes
     int playerScore; // Player is the playable actor
-    // int npcOneScore;
-    // int npcTwoScore;
-    // int npcThreeScore;
     String npcOneName = "Tiger";
     String npcTwoName = "Harold";
     String npcThreeName = "Steve";
     NPC npcOne;
     NPC npcTwo;
     NPC npcThree;
-    // Tracks if player has gone out -> When all cards in players hand have been
-    // turned over -> All hands must turn over after their next turn and hole/round
-    // ends
     boolean playerOut = false;
-    // boolean npcOneOut = false;
-    // boolean npcTwoOut = false;
-    // boolean npcThreeOut = false;
     boolean roundOver = false;
     boolean startNextRound = true;
 
@@ -74,24 +64,17 @@ public class GolfGame {
 
             if (startNextRound) {
                 startNextRound = false;
-                buildGame();
-                startGame();
+                freshDeck();
+                shuffleDeck();
+                stackDeck();
+                dealCards();
+                buildGUI();
+                // chooseFaceUp();
+                // beginRound();
+
                 holeNumber++;
             }
         }
-    }
-
-    public void buildGame() {
-        freshDeck();
-        shuffleDeck();
-        stackDeck();
-        dealCards();
-    }
-
-    public void startGame() {
-        buildGUI();
-        //chooseFaceUp();
-        // beginRound();
     }
 
     public void freshDeck() {
@@ -156,10 +139,6 @@ public class GolfGame {
         // deal to player
         playerHand = new HashMap<Integer, Card>();
 
-        // npcOneHand = new HashMap<Integer, Card>();
-        // npcTwoHand = new HashMap<Integer, Card>();
-        // npcThreeHand = new HashMap<Integer, Card>();
-
         // iterates 6 times, each player receives 6 cards when dealing
         for (Integer v = 1; v <= 6; v++) {
             playerHand.put(v, playableDeck.pop()); // removes card from top of deck and adds it to players hand,
@@ -175,10 +154,12 @@ public class GolfGame {
     }
 
     public void chooseFaceUp(Graphics g) {
-        String message = "Flip one card";
-        g.setFont(new Font("Arial", Font.PLAIN, 30));
-        g.setColor(Color.white);
-        g.drawString(message, 300, 300);
+        // String message = "Flip one card";
+        // g.setFont(new Font("Arial", Font.PLAIN, 30));
+        // g.setColor(Color.white);
+        // g.drawString(message, 300, 300);
+
+        
 
     }
 
