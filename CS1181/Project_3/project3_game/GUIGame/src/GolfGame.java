@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Stack;
 
+import javax.sound.sampled.SourceDataLine;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -24,6 +25,11 @@ public class GolfGame {
     boolean playerOut = false;
     boolean roundOver = false;
     boolean startNextRound = true;
+    boolean drewCard = false;
+    boolean beginGame = true;
+
+    int cardWidth = 120;
+    int cardHeight = (int) (cardWidth * 1.4);
 
     // ArrayList used to initialize and shuffle new deck of cards
     ArrayList<Card> deck;
@@ -34,7 +40,14 @@ public class GolfGame {
     // Another stack is used for the discard/kitty
     Stack<Card> discard;
 
+    // player hand and buttons created so they are accessible by other methods
     Map<Integer, Card> playerHand;
+    JButton cardButton1; // top left
+    JButton cardButton2; // top middle
+    JButton cardButton3; // top right
+    JButton cardButton4; // bottom left
+    JButton cardButton5; // bottom middle
+    JButton cardButton6; // bottom right
 
     // shuffler
     Random shuffle = new Random();
@@ -68,9 +81,9 @@ public class GolfGame {
                 shuffleDeck();
                 stackDeck();
                 dealCards();
+                chooseFirstPlayer();
                 buildGUI();
                 // chooseFaceUp();
-                // beginRound();
 
                 holeNumber++;
             }
@@ -99,8 +112,8 @@ public class GolfGame {
             }
         }
 
-        System.out.println("Building deck:");
-        System.out.println(deck);
+        // System.out.println("Building deck:");
+        // System.out.println(deck);
     }
     // shuffle the newly created deck using random
 
@@ -159,11 +172,69 @@ public class GolfGame {
         // g.setColor(Color.white);
         // g.drawString(message, 300, 300);
 
+    }
+
+    /**
+     * Tracks which button was clicked in playerhand and in deck
+     */
+    public void playerDeckInteract(int cardNumber) {
         
+        
+        if ((playerTurn == 0 && drewCard) || beginGame) {
+
+            Card card = playerHand.get(cardNumber);
+            System.out.println(card);
+            ImageIcon cardImage = new ImageIcon(card.getCardFile());
+            Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
+            cardImage = new ImageIcon(scaleDown);
+
+            switch (cardNumber) {
+                case 1 -> cardButton1.setIcon(cardImage);
+                case 2 -> cardButton2.setIcon(cardImage);
+                case 3 -> cardButton3.setIcon(cardImage);
+                case 4 -> cardButton4.setIcon(cardImage);
+                case 5 -> cardButton5.setIcon(cardImage);
+                case 6 -> cardButton6.setIcon(cardImage);
+            }
+            beginGame = false;
+            // cardButton1.setEnabled(false);
+            // cardButton2.setEnabled(false);
+            // cardButton3.setEnabled(false);
+            // cardButton4.setEnabled(false);
+            // cardButton5.setEnabled(false);
+            // cardButton6.setEnabled(false);
+
+            switch (playerTurn) {
+                // Players turn to go
+                case 0:
+                    drewCard = true;
+                    System.out.println("return");
+                    
+                    // break;
+
+                // npcOne turn to go
+                case 1:
+                    playerTurn = 2;
+                    break;
+
+                // npcTwo turn to go
+                case 2:
+                    playerTurn = 3;
+                    break;
+
+                // npcThree turn to go
+                case 3:
+                    playerTurn = 0;
+                    System.out.println("going to case 0");
+                    break;
+
+            }
+
+        }
 
     }
 
-    public void beginRound() {
+    public void chooseFirstPlayer() {
         playerTurn = 0; // -> 0 for player / 1 for npcOne / 2 for npcTwo / 3 for npcThree | This is used
                         // to determine who starts the round
         if (holeNumber == 1 || holeNumber == 5 || holeNumber == 9) {
@@ -177,46 +248,10 @@ public class GolfGame {
         }
     }
 
-    public void turnLoop() {
-
-        if (roundOver)
-            return;
-
-        switch (playerTurn) {
-            // Players turn to go
-            case 0:
-
-                // fixme for turning over one card
-                // Card card = playerHand.get(k);
-                // JButton cardButton = new JButton();
-                // ImageIcon cardImage = new ImageIcon(card.getCardFile());
-
-                break;
-
-            // npcOne turn to go
-            case 1:
-                break;
-
-            // npcTwo turn to go
-            case 2:
-                break;
-
-            // npcThree turn to go
-            case 3:
-                break;
-
-        }
-        playerTurn = (playerTurn + 1) % 4;
-
-    }
-
     public void buildGUI() {
 
         int windowWidth = 1300;
         int windowHeight = 1300;
-
-        int cardWidth = 120;
-        int cardHeight = (int) (cardWidth * 1.4);
 
         Color backGround = new Color(53, 101, 77);
 
@@ -225,7 +260,7 @@ public class GolfGame {
         playerPanel = new JPanel(); // players hand at botton of window
         IOPanel = new JPanel();
         tableCenter = new JPanel(); // center of table where deck and discard piles exist
-        npcOnePanel = new JPanel(); // npcOne hand on left side of window
+        // npcOnePanel = new JPanel(); // npcOne hand on left side of window
         npcTwoPanel = new JPanel(); // npcTwo hand on top of window
         npcThreePanel = new JPanel(); // npcThree hand on right of window
 
@@ -245,7 +280,26 @@ public class GolfGame {
 
         IOPanel.setLayout(new GridLayout(2, 1));
         IOPanel.setBackground(new Color(53, 101, 77));
-        npcOnePanel.setLayout(new BorderLayout());
+
+        npcOnePanel = new JPanel() {
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                for (int k = 1; k <= 6; k++) {
+
+                    // int cardNumber = k;
+                    ImageIcon icon = new ImageIcon("GUIGame/src/cards/BACK.png");
+                    Image cardImage = icon.getImage();
+                    g.drawImage(cardImage, 10 + (cardWidth + 5) * k, 10, cardWidth, cardHeight, this);
+                    // Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth,
+                    // cardHeight, Image.SCALE_SMOOTH);
+                    // cardImage = new ImageIcon(scaleDown);
+                    // cardButton.setIcon(cardImage);
+                }
+            }
+        };
+
+        // npcOnePanel.setLayout(new BorderLayout());
         npcOnePanel.setBackground(backGround);
 
         npcTwoPanel.setLayout(new BorderLayout());
@@ -296,23 +350,54 @@ public class GolfGame {
         playerPanel.setBackground(backGround);
         for (int k = 1; k <= 6; k++) {
 
+            int cardNumber = k;
             JButton cardButton = new JButton();
-            ImageIcon cardImage = new ImageIcon("./cards/BACK.png");
+            ImageIcon cardImage = new ImageIcon("GUIGame/src/cards/BACK.png");
             Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
             cardImage = new ImageIcon(scaleDown);
             cardButton.setIcon(cardImage);
-            cardButton.setBorderPainted(false);
-            cardButton.setContentAreaFilled(false);
+            // cardButton.setBorderPainted(false);
+            // cardButton.setContentAreaFilled(false);
+            // cardButton.setOpaque(false);
+            // cardButton.setSize(cardWidth, cardHeight); //doesn't work need to implement
+            // gridBagLayout next time I think the grid layout is causing spacing issues
 
             cardButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
 
-                    playerPanel.repaint();
+                    playerDeckInteract(cardNumber);
                 }
 
             });
-            playerPanel.add(cardButton);
 
+            // now assigning cardButton to the appropriate button defined earlier
+            switch (k) {
+                case 1 -> {
+                    cardButton1 = cardButton;
+                    playerPanel.add(cardButton1);
+                    System.out.println("inside case 1");
+                }
+                case 2 -> {
+                    cardButton2 = cardButton;
+                    playerPanel.add(cardButton2);
+                }
+                case 3 -> {
+                    cardButton3 = cardButton;
+                    playerPanel.add(cardButton3);
+                }
+                case 4 -> {
+                    cardButton4 = cardButton;
+                    playerPanel.add(cardButton4);
+                }
+                case 5 -> {
+                    cardButton5 = cardButton;
+                    playerPanel.add(cardButton5);
+                }
+                case 6 -> {
+                    cardButton6 = cardButton;
+                    playerPanel.add(cardButton6);
+                }
+            }
         }
 
         bottomPanel.add(playerPanel, BorderLayout.CENTER);

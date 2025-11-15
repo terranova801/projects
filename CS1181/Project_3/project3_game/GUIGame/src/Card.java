@@ -20,6 +20,6 @@ public class Card {
         }
         
         public String getCardFile() {
-            return "./cards/" + this.value + "-" + this.suite + ".png";
+            return "GUIGame/src/cards/" + this.value + "-" + this.suite + ".png";
         }
     }
