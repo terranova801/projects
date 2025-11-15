@@ -197,6 +197,7 @@ public class GolfGame {
                 case 6 -> cardButton6.setIcon(cardImage);
             }
             beginGame = false;
+            playerTurn++;
             // cardButton1.setEnabled(false);
             // cardButton2.setEnabled(false);
             // cardButton3.setEnabled(false);
@@ -204,34 +205,37 @@ public class GolfGame {
             // cardButton5.setEnabled(false);
             // cardButton6.setEnabled(false);
 
-            switch (playerTurn) {
-                // Players turn to go
-                case 0:
-                    drewCard = true;
-                    System.out.println("return");
+            // switch (playerTurn) {
+            //     // Players turn to go
+            //     case 0:
+            //         drewCard = true;
+            //         System.out.println("return");
                     
-                    // break;
+            //         break;
 
-                // npcOne turn to go
-                case 1:
-                    playerTurn = 2;
-                    break;
+            //     // npcOne turn to go
+            //     case 1:
+            //         playerTurn = 2;
+            //         break;
 
-                // npcTwo turn to go
-                case 2:
-                    playerTurn = 3;
-                    break;
+            //     // npcTwo turn to go
+            //     case 2:
+            //         playerTurn = 3;
+            //         break;
 
-                // npcThree turn to go
-                case 3:
-                    playerTurn = 0;
-                    System.out.println("going to case 0");
-                    break;
+            //     // npcThree turn to go
+            //     case 3:
+            //         playerTurn = 0;
+            //         System.out.println("going to case 0");
+            //         break;
 
-            }
+            // }
+
+    
 
         }
 
+        //return;
     }
 
     public void chooseFirstPlayer() {
@@ -248,7 +252,7 @@ public class GolfGame {
         }
     }
 
-    public void buildGUI() {
+    public void MyFrame extends JFrame implements ActionListener() {
 
         int windowWidth = 1300;
         int windowHeight = 1300;
