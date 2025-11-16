@@ -10,7 +10,8 @@ public class NPC {
     int cardPositionRand;
     Map<Integer, Card> hand;
     Map<Integer, Boolean> cardFlipped; // key is round number, value is round score
-    Random random = new Random();
+    Card discardToKitty;
+
 
     public NPC(String name) {
         this.name = name;
@@ -42,26 +43,89 @@ public class NPC {
                         if (hand.get(i - 3).getValue() == discard.getValue()) {
                             break;
                         } else {
+                            discardToKitty = hand.get(i - 3);
                             hand.put((i - 3), discard);
                             cardFlipped.put(i - 3, true);
-                            i = 7;
+
                             return true;
                         }
-                    } else if (i < 3) {
+                    } else if (i <= 3) {
                         if (hand.get(i + 3).getValue() == discard.getValue()) {
                             break;
                         } else {
+                            discardToKitty = hand.get(i + 3);
                             hand.put(i + 3, discard);
                             cardFlipped.put(i - 3, true);
-                            i = 7;
+
                             return true;
                         }
                     }
                 }
             }
+
+            if (randomPickup(discard)) {
+                return true;
+            }
+
             return false;
         }
 
+    }
+
+    // not perfect but works
+    public boolean randomPickup(Card card) {
+
+        for (int i = 1; i <= 6; i++) {
+            if (getRand(card.numValue) == i || getRand(card.numValue) == 2 * i) {
+                discardToKitty = hand.get(i);
+                hand.put(i, card);
+                cardFlipped.put(i, true);
+                return true;
+
+            }
+
+        }
+        return false;
+
+    }
+
+    public Boolean takeDraw(Card drawCard) {
+        for (int i = 1; i <= 6; i++) {
+            if (drawCard.getValue() == hand.get(i).getValue()) {
+                if (i > 3) {
+                    if (hand.get(i - 3).getValue() == drawCard.getValue()) {
+                        break;
+                    } else {
+                        discardToKitty = hand.get(i - 3);
+                        hand.put((i - 3), drawCard);
+                        cardFlipped.put(i - 3, true);
+                        return true;
+                    }
+                } else if (i <= 3) {
+                    if (hand.get(i + 3).getValue() == drawCard.getValue()) {
+                        break;
+                    } else {
+                        discardToKitty = hand.get(i + 3);
+                        hand.put(i + 3, drawCard);
+                        cardFlipped.put(i - 3, true);
+
+                        return true;
+                    }
+                }
+            }
+        }
+
+        if (randomPickup(drawCard)) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public int getRand(int cardValue) {
+        Random rnd = new Random();
+        return rnd.nextInt((cardValue + 3));
     }
 
     public String getPosition() {
@@ -70,6 +134,10 @@ public class NPC {
 
     public boolean getPlayerOut() {
         return playerOut;
+    }
+    public Card getDiscarded(){
+
+        return discardToKitty;
     }
     // public boolean setPlayerOut() {
     // //fixme
