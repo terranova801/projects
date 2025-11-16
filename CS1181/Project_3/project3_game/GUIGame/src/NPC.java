@@ -12,12 +12,12 @@ public class NPC {
     Map<Integer, Boolean> cardFlipped; // key is round number, value is round score
     Card discardToKitty;
 
-
     public NPC(String name) {
         this.name = name;
         // this.position = position;
         // playerOut = false;
         hand = new HashMap<Integer, Card>(); // initializes map for player hand
+        cardFlipped = new HashMap<Integer, Boolean>();
     }
 
     // adds cards to players hand
@@ -32,7 +32,7 @@ public class NPC {
     // randomly flips card at beginning of game
     public Boolean pickFaceUp(int randomNum, Card discard) {
 
-        if (!cardFlipped.containsKey(true)) {
+        if (cardFlipped.isEmpty()) {
             hand.get(randomNum).flipCard();
             cardFlipped.put(randomNum, true);
             return true;
@@ -55,7 +55,7 @@ public class NPC {
                         } else {
                             discardToKitty = hand.get(i + 3);
                             hand.put(i + 3, discard);
-                            cardFlipped.put(i - 3, true);
+                            cardFlipped.put(i + 3, true);
 
                             return true;
                         }
@@ -107,7 +107,7 @@ public class NPC {
                     } else {
                         discardToKitty = hand.get(i + 3);
                         hand.put(i + 3, drawCard);
-                        cardFlipped.put(i - 3, true);
+                        cardFlipped.put(i + 3, true);
 
                         return true;
                     }
@@ -123,8 +123,10 @@ public class NPC {
 
     }
 
+    Random rnd = new Random();
+
     public int getRand(int cardValue) {
-        Random rnd = new Random();
+
         return rnd.nextInt((cardValue + 3));
     }
 
@@ -135,7 +137,8 @@ public class NPC {
     public boolean getPlayerOut() {
         return playerOut;
     }
-    public Card getDiscarded(){
+
+    public Card getDiscarded() {
 
         return discardToKitty;
     }
