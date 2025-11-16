@@ -26,7 +26,7 @@ public class GolfGame implements ActionListener {
     boolean playerOut = false;
     boolean roundOver = false;
     boolean startNextRound = true;
-    boolean drewCard = false;
+    boolean playerDraw = false;
     boolean beginGame = true;
     Integer[][] scores = new Integer[18][5]; // stores round number and scores, as well as the running total scores
     String[] columnLabels = { "Hole No.", playerName, npcOneName, npcTwoName, npcThreeName };
@@ -78,6 +78,7 @@ public class GolfGame implements ActionListener {
     // JTextArea scoreBoard;
     JTable scoreBoard;
     JTextArea userInfo;
+    JScrollPane userScroll;
     JLabel npcOneTitle;
     JLabel npcTwoTitle;
     JLabel npcThreeTitle;
@@ -91,22 +92,22 @@ public class GolfGame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cardButton1) {
-            flip(1);
+            handleCardClick(1);
         }
         if (e.getSource() == cardButton2) {
-            flip(2);
+            handleCardClick(2);
         }
         if (e.getSource() == cardButton3) {
-            flip(3);
+            handleCardClick(3);
         }
         if (e.getSource() == cardButton4) {
-            flip(4);
+            handleCardClick(4);
         }
         if (e.getSource() == cardButton5) {
-            flip(5);
+            handleCardClick(5);
         }
         if (e.getSource() == cardButton6) {
-            flip(6);
+            handleCardClick(6);
         }
         if (e.getSource() == startNextButton) {
             System.out.println("StartGame!!!!");
@@ -120,10 +121,16 @@ public class GolfGame implements ActionListener {
             enablePlayerCards();
         }
         if (e.getSource() == kittyButton) {
-            System.out.println("KITTY");
-            takeFromDraw();
-            enablePlayerCards();
+            if (playerDraw) {
+                discardDraw();
+                playerDraw = false;
+            } else {
+                System.out.println("KITTY");
+                takeFromDiscard();
+                enablePlayerCards();
+            }
         }
+
     }
 
     public GolfGame() {
@@ -138,17 +145,7 @@ public class GolfGame implements ActionListener {
             npcTwoTitle = new JLabel();
             npcThreeTitle = new JLabel();
 
-            if (startNextRound) {
-                startNextRound = false;
-                freshDeck();
-                shuffleDeck();
-                stackDeck();
-                dealCards();
-                chooseFirstPlayer();
-                // chooseFaceUp();
-
-                // holeNumber++;
-            }
+            freshDeck(); // initializes cards and deals
 
             frame = new JFrame("6 Card Golf");
 
@@ -301,6 +298,7 @@ public class GolfGame implements ActionListener {
             // deckButton = new JButton();
             kittyButton = new JButton();
             kittyButton.addActionListener(this);
+            kittyButton.setEnabled(false);
 
             // start next game
             startNextButton = new JButton();
@@ -320,7 +318,11 @@ public class GolfGame implements ActionListener {
 
             userInfo = new JTextArea();
             userInfo.setFont(new Font("Dialog", Font.BOLD, 20));
-            userInfo.setEditable(false);
+            userInfo.setEditable(true);
+
+            userScroll = new JScrollPane(userInfo);
+
+
 
             // NPC JLabel for displaying NPC names
             npcOneTitle.setText(npcOneName);
@@ -387,6 +389,7 @@ public class GolfGame implements ActionListener {
                         deckButton.setText("Draw Pile");
                         deckButton.setFont(new Font("Serif", Font.BOLD, 30));
                         deckButton.setFocusable(false);
+                        deckButton.setEnabled(false);
                         tableCenter.add(deckButton);
                     }
 
@@ -404,10 +407,6 @@ public class GolfGame implements ActionListener {
             kittyButton.setText("Discard Pile");
             kittyButton.setFont(new Font("Serif", Font.BOLD, 30));
             kittyButton.setFocusable(false);
-            if (beginGame) {
-                kittyButton.setEnabled(false);
-                deckButton.setEnabled(false);
-            }
 
             tableCenter.add(kittyButton);
 
@@ -415,7 +414,7 @@ public class GolfGame implements ActionListener {
             buttonPanel.add(endGameButton);
 
             textOutPanel.add(scoreBoard);
-            textOutPanel.add(userInfo);
+            textOutPanel.add(userScroll);
 
             bottomPanel.add(textOutPanel);
             bottomPanel.add(playerPanel);
@@ -433,7 +432,7 @@ public class GolfGame implements ActionListener {
             frame.setLocationRelativeTo(null);
             frame.setResizable(false);
             frame.setVisible(true);
-            userInfo.setText("Your turn is up!");
+            // userInfo.setText("Your turn is up!");
         }
     }
 
@@ -442,9 +441,10 @@ public class GolfGame implements ActionListener {
     }
 
     public void takeFromDiscard() {
-        toPlace = playableDeck.pop();
+        toPlace = playableDeck.peek();
         enablePlayerCards();
         tableCenter.repaint();
+        playerDraw = false;
 
     }
 
@@ -457,6 +457,7 @@ public class GolfGame implements ActionListener {
         deckButton.setIcon(flippedImage);
         enablePlayerCards();
         tableCenter.repaint();
+        playerDraw = true;
 
     }
 
@@ -465,6 +466,12 @@ public class GolfGame implements ActionListener {
         Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
         cardImage = new ImageIcon(scaleDown);
         deckButton.setIcon(cardImage);
+
+        ImageIcon kittyImage = new ImageIcon(playableDeck.peek().getCardFile());
+        scaleDown = kittyImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
+        kittyImage = new ImageIcon(scaleDown);
+        kittyButton.setIcon(kittyImage);
+
         tableCenter.repaint();
 
     }
@@ -522,13 +529,7 @@ public class GolfGame implements ActionListener {
                 deck.add(new Card("Joker", -2, "Joker"));
             }
         }
-
-        // System.out.println("Building deck:");
-        // System.out.println(deck);
-    }
-    // shuffle the newly created deck using random
-
-    public void shuffleDeck() {
+        // shuffle the newly created deck using random
         // shuffle twice
         for (int k = 0; k < 2; k++) {
             // loops through deck
@@ -543,23 +544,16 @@ public class GolfGame implements ActionListener {
         }
         System.out.println("Shuffled cards");
         System.out.println(deck);
-    }
 
-    /**
-     * Takes the shuffled arraylist and builds a stack that will be drawn from
-     * during the game
-     * The discard Stack is also initialized in this method
-     */
-    public void stackDeck() {
+        // Takes the shuffled arraylist and builds a stack that will be drawn from
+        // during the game. The discard Stack is also initialized in this method
         playableDeck = new Stack<Card>();
         discard = new Stack<Card>(); // initialize discard stack
 
         for (Card c : deck) {
             playableDeck.push(c);
         }
-    }
-
-    public void dealCards() {
+        // deal cards to everyone
         // deal to player
         playerHand = new HashMap<Integer, Card>();
 
@@ -573,6 +567,58 @@ public class GolfGame implements ActionListener {
         }
         // discard.push(playableDeck.pop());
 
+    }
+
+    public void flipFirstCard(int cardNumber) {
+        enablePlayerCards();
+        Card toFlip = playerHand.get(cardNumber);
+        System.out.println(toFlip);
+        ImageIcon cardImage = new ImageIcon(toFlip.getCardFile());
+        Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
+        cardImage = new ImageIcon(scaleDown);
+
+        switch (cardNumber) {
+            case 1 -> cardButton1.setIcon(cardImage);
+            case 2 -> cardButton2.setIcon(cardImage);
+            case 3 -> cardButton3.setIcon(cardImage);
+            case 4 -> cardButton4.setIcon(cardImage);
+            case 5 -> cardButton5.setIcon(cardImage);
+            case 6 -> cardButton6.setIcon(cardImage);
+        }
+
+        playerPanel.repaint();
+        disablePlayerCards();
+
+        npcOne.pickFirstFace();
+        npcOnePanel.repaint();
+
+        npcTwo.pickFirstFace();
+        npcTwoPanel.repaint();
+
+        npcThree.pickFirstFace();
+        npcThreePanel.repaint();
+
+        enableDecks();
+
+    }
+
+    public void handleCardClick(int cardNumber) {
+
+        if (beginGame) {
+            flipFirstCard(cardNumber);
+            beginGame = false;
+            disablePlayerCards();
+        } else {
+            flip(cardNumber);
+            playerDraw = false;
+        }
+    }
+
+    public void discardDraw() {
+        repaintDraw();
+        disablePlayerCards();
+        disableDecks();
+        npcCycle();
     }
 
     /**
@@ -597,44 +643,33 @@ public class GolfGame implements ActionListener {
 
         playerPanel.repaint();
 
-        if (beginGame) {
-            kittyButton.setEnabled(true);
-            deckButton.setEnabled(true);
-            beginGame = false;
-            return;
-        }
+        // disablePlayerCards();
+        // disableDecks();
+        // swapping cards
 
+        Card toPlace = playableDeck.pop(); // FIXME im not sure if correct
+        playableDeck.push(toDiscard);
+        playerHand.put(cardNumber, toPlace);
+
+        ImageIcon newCardImage = new ImageIcon(toPlace.getCardFile());
+        Image scaleDownAgain = newCardImage.getImage().getScaledInstance(cardWidth, cardHeight,
+                Image.SCALE_SMOOTH);
+        newCardImage = new ImageIcon(scaleDownAgain);
+
+        switch (cardNumber) {
+            case 1 -> cardButton1.setIcon(newCardImage);
+            case 2 -> cardButton2.setIcon(newCardImage);
+            case 3 -> cardButton3.setIcon(newCardImage);
+            case 4 -> cardButton4.setIcon(newCardImage);
+            case 5 -> cardButton5.setIcon(newCardImage);
+            case 6 -> cardButton6.setIcon(newCardImage);
+        }
+        repaintDraw();
+        playerPanel.repaint();
+        // tableCenter.repaint();
         disablePlayerCards();
         disableDecks();
-        // swapping cards
-        Timer userSeeCard = new Timer(3000, e -> {
-
-            playableDeck.pop(); //FIXME im not sure if correct
-            playableDeck.push(toDiscard);
-            playerHand.put(cardNumber, toPlace);
-
-            ImageIcon newCardImage = new ImageIcon(toPlace.getCardFile());
-            Image scaleDownAgain = newCardImage.getImage().getScaledInstance(cardWidth, cardHeight,
-                    Image.SCALE_SMOOTH);
-            newCardImage = new ImageIcon(scaleDownAgain);
-
-            switch (cardNumber) {
-                case 1 -> cardButton1.setIcon(newCardImage);
-                case 2 -> cardButton2.setIcon(newCardImage);
-                case 3 -> cardButton3.setIcon(newCardImage);
-                case 4 -> cardButton4.setIcon(newCardImage);
-                case 5 -> cardButton5.setIcon(newCardImage);
-                case 6 -> cardButton6.setIcon(newCardImage);
-            }
-            repaintDraw();
-            playerPanel.repaint();
-
-            enableDecks();
-            playerTurn = 1;
-            npcCycle();
-        });
-        userSeeCard.setRepeats(false);
-        userSeeCard.start();
+        npcCycle();
 
     }
 
@@ -651,95 +686,47 @@ public class GolfGame implements ActionListener {
         delayTwo = shuffle.nextInt(3000) + 2000;
         delayThree = shuffle.nextInt(3000) + 2000;
 
-        while (playerTurn != 0) {
-            switch (playerTurn) {
+        npcTurn(npcOne, npcOnePanel, delayOne, () -> {
+            npcTurn(npcTwo, npcTwoPanel, delayTwo, () -> {
+                npcTurn(npcThree, npcThreePanel, delayThree, () -> {
+                    System.out.println("\n" + playerName + " is up!");
+                    userInfo.append("\n" + playerName + " is up!");
+                    enableDecks();
+                });
+            });
 
-                case 1:
-                System.out.println(npcOneName + " is up!");
-                    userInfo.setText(npcOneName + " is up!");
-                    Timer npcOneWait = new Timer(delayOne, e -> {
-                        randomNum = shuffle.nextInt(6) + 1;
-                        if (!npcOne.pickFaceUp(randomNum, playableDeck.peek())) {
-                            if (npcOne.takeDraw(playableDeck.peek())) {
-                                playableDeck.pop();
-                                playableDeck.push(npcOne.getDiscarded());
-                                repaintDraw();
-                            }
+        });
 
-                            tableCenter.repaint();
-                        }
-                        npcOnePanel.repaint();
-                        userInfo.repaint();
-                    });
-                    npcOneWait.setRepeats(false);
-                    npcOneWait.start();
-                    playerTurn++;
-                    
+    }
 
-                case 2:
-                System.out.println(npcTwoName + " is up!");
-                    userInfo.setText(npcTwoName + " is up!");
-                    Timer npcTwoWait = new Timer(delayOne, e -> {
-                        randomNum = shuffle.nextInt(6) + 1;
-                        if (!npcTwo.pickFaceUp(randomNum, playableDeck.peek())) {
-                            if (npcTwo.takeDraw(playableDeck.peek())) {
-                                playableDeck.pop();
-                                playableDeck.push(npcTwo.getDiscarded());
-                                repaintDraw();
-                            }
+    private void npcTurn(NPC npc, JPanel npcPanel, int delay, Runnable done) {
+        userInfo.append("\n" + npc.getName() + " is up!");
 
-                            tableCenter.repaint();
-                        }
-                        npcTwoPanel.repaint();
-                        userInfo.repaint();
-                    });
-                    npcTwoWait.setRepeats(false);
-                    npcTwoWait.start();
-                    playerTurn++;
-                    
-
-                case 3:
-                System.out.println(npcThreeName + " is up!");
-                    userInfo.setText(npcThreeName + " is up!");
-                    Timer npcThreeWait = new Timer(delayOne, e -> {
-                        randomNum = shuffle.nextInt(6) + 1;
-                        if (!npcThree.pickFaceUp(randomNum, playableDeck.peek())) {
-                            if (npcThree.takeDraw(playableDeck.peek())) {
-                                playableDeck.pop();
-                                playableDeck.push(npcThree.getDiscarded());
-                                repaintDraw();
-                            }
-
-                            tableCenter.repaint();
-                        }
-                        npcThreePanel.repaint();
-                        userInfo.repaint();
-                    });
-                    npcThreeWait.setRepeats(false);
-                    npcThreeWait.start();
-                    playerTurn = 0;
-                    
-
+        Timer npcTimer = new Timer(delay, e -> {
+            if (!npc.pickUpKitty(playableDeck.peek())) {
+                playableDeck.pop();
+                if (npc.takeDraw(playableDeck.peek())) {
+                    userInfo.append("\n" + npc.getName() + " picks up draw card " + playableDeck.peek().toString());
+                    playableDeck.pop();
+                    playableDeck.push(npc.getDiscarded());
+                } else {
+                    userInfo.append("\n" + npc.getName() + " discards their draw " + playableDeck.peek().toString());
+                }
+            } else {
+                userInfo.append("\n" + npc.getName() + " picks up discard " + playableDeck.peek().toString());
+                playableDeck.pop();
+                playableDeck.push(npc.getDiscarded());
             }
-        }
-        enableDecks();
-        userInfo.setText("Your turn is up!");
-        userInfo.repaint();
-        userInfo.repaint();
+            repaintDraw();
+            npcPanel.repaint();
+            tableCenter.repaint();
+            userInfo.repaint();
+            done.run();
+        });
+
+        npcTimer.setRepeats(false);
+        npcTimer.start();
 
     }
 
-    public void chooseFirstPlayer() {
-        playerTurn = 0; // -> 0 for player / 1 for npcOne / 2 for npcTwo / 3 for npcThree | This is used
-                        // to determine who starts the round
-        if (holeNumber == 1 || holeNumber == 5 || holeNumber == 9) {
-            playerTurn = 0;
-        } else if (holeNumber == 2 || holeNumber == 6) {
-            playerTurn = 1;
-        } else if (holeNumber == 3 || holeNumber == 7) {
-            playerTurn = 2;
-        } else if (holeNumber == 4 || holeNumber == 8) {
-            playerTurn = 3;
-        }
-    }
 }
