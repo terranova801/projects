@@ -26,4 +26,5 @@ public class Card {
             return faceDown;
 
         }
+        public String getValue();
     }

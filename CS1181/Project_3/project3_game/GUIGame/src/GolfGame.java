@@ -7,13 +7,16 @@ import java.util.Random;
 import java.util.Stack;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public class GolfGame implements ActionListener {
 
     int holeNumber = 1; // Round number, golf games typically has 9 holes or rounds
     int numDecks = 2;
     int playerTurn;
+    int randomNum;
     int playerScore; // Player is the playable actor
+    String playerName = "Alex";
     String npcOneName = "Tiger";
     String npcTwoName = "Harold";
     String npcThreeName = "Steve";
@@ -25,10 +28,14 @@ public class GolfGame implements ActionListener {
     boolean startNextRound = true;
     boolean drewCard = false;
     boolean beginGame = true;
+    Integer[][] scores = new Integer[18][5]; // stores round number and scores, as well as the running total scores
+    String[] columnLabels = { "Hole No.", playerName, npcOneName, npcTwoName, npcThreeName };
 
     int cardWidth = 120;
     int cardHeight = (int) (cardWidth * 1.4);
 
+    Card toPlace;
+    Card toDiscard;
     // ArrayList used to initialize and shuffle new deck of cards
     ArrayList<Card> deck;
 
@@ -53,6 +60,9 @@ public class GolfGame implements ActionListener {
     // all GUI buttons, etc
     JFrame frame;
     JPanel gamePanel;
+    JPanel bottomPanel;
+    JPanel buttonPanel;
+    JPanel textOutPanel;
     JPanel playerPanel; // players hand at botton of window
     // JPanel IOPanel;
     JPanel tableCenter; // center of table where deck and discard piles exist
@@ -65,12 +75,19 @@ public class GolfGame implements ActionListener {
     JButton kittyButton;
     JButton startNextButton;
     JButton endGameButton;
-    JTextArea scoreBoard;
+    // JTextArea scoreBoard;
+    JTable scoreBoard;
+    JTextArea userInfo;
+    JLabel npcOneTitle;
+    JLabel npcTwoTitle;
+    JLabel npcThreeTitle;
 
     int windowWidth = 1300;
     int windowHeight = 1300;
 
     Color backGround = new Color(53, 101, 77);
+
+    Timer timer;
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cardButton1) {
@@ -105,17 +122,27 @@ public class GolfGame implements ActionListener {
         }
         if (e.getSource() == deckButton) {
             System.out.println("DECK");
+            takeFromDraw();
+            enablePlayerCards();
         }
         if (e.getSource() == kittyButton) {
             System.out.println("KITTY");
+            takeFromDraw();
+            enablePlayerCards();
         }
     }
 
     public GolfGame() {
         if (holeNumber <= 1) {
+            // initializing NPC instances
             npcOne = new NPC(npcOneName);
             npcTwo = new NPC(npcTwoName);
             npcThree = new NPC(npcThreeName);
+
+            // initialize NPC titles
+            npcOneTitle = new JLabel();
+            npcTwoTitle = new JLabel();
+            npcThreeTitle = new JLabel();
 
             if (startNextRound) {
                 startNextRound = false;
@@ -132,6 +159,9 @@ public class GolfGame implements ActionListener {
             frame = new JFrame("6 Card Golf");
 
             gamePanel = new JPanel();
+            bottomPanel = new JPanel();
+            buttonPanel = new JPanel();
+            textOutPanel = new JPanel();
             playerPanel = new JPanel(); // players hand at botton of window
             tableCenter = new JPanel(); // center of table where deck and discard piles
             npcOnePanel = new JPanel() {
@@ -142,10 +172,10 @@ public class GolfGame implements ActionListener {
 
                     for (int k = 1; k <= 3; k++) {
                         ImageIcon cardImage;
-                        if (npcTwo.getCard(k).hiddenCard()) {
+                        if (npcOne.getCard(k).hiddenCard()) {
                             cardImage = new ImageIcon("src/cards/BACK.png");
                         } else {
-                            cardImage = new ImageIcon(npcThree.getCard(k).getCardFile());
+                            cardImage = new ImageIcon(npcOne.getCard(k).getCardFile());
                         }
                         Image cardDisplay = cardImage.getImage();
                         g.drawImage(cardDisplay, -100 + (cardWidth + 15) * k, 10, cardWidth, cardHeight,
@@ -153,10 +183,10 @@ public class GolfGame implements ActionListener {
                     }
                     for (int k = 1; k <= 3; k++) {
                         ImageIcon cardImage;
-                        if (npcTwo.getCard(k + 3).hiddenCard()) {
+                        if (npcOne.getCard(k + 3).hiddenCard()) {
                             cardImage = new ImageIcon("src/cards/BACK.png");
                         } else {
-                            cardImage = new ImageIcon(npcThree.getCard(k + 3).getCardFile());
+                            cardImage = new ImageIcon(npcOne.getCard(k + 3).getCardFile());
                         }
                         Image cardDisplay = cardImage.getImage();
                         g.drawImage(cardDisplay, -100 + (cardWidth + 15) * k, 190, cardWidth, cardHeight,
@@ -217,7 +247,7 @@ public class GolfGame implements ActionListener {
 
                     for (int k = 1; k <= 3; k++) {
                         ImageIcon cardImage;
-                        if (npcTwo.getCard(k).hiddenCard()) {
+                        if (npcThree.getCard(k).hiddenCard()) {
                             cardImage = new ImageIcon("src/cards/BACK.png");
                         } else {
                             cardImage = new ImageIcon(npcThree.getCard(k).getCardFile());
@@ -228,10 +258,10 @@ public class GolfGame implements ActionListener {
                     }
                     for (int k = 1; k <= 3; k++) {
                         ImageIcon cardImage;
-                        if (npcTwo.getCard(k + 3).hiddenCard()) {
+                        if (npcThree.getCard(k + 3).hiddenCard()) {
                             cardImage = new ImageIcon("src/cards/BACK.png");
                         } else {
-                            cardImage = new ImageIcon(npcThree.getCard(k).getCardFile());
+                            cardImage = new ImageIcon(npcThree.getCard(k + 3).getCardFile());
                         }
                         Image cardDisplay = cardImage.getImage();
                         g.drawImage(cardDisplay, -100 + (cardWidth + 15) * k, 190, cardWidth, cardHeight,
@@ -250,7 +280,17 @@ public class GolfGame implements ActionListener {
             gamePanel.setLayout(new BorderLayout());
             gamePanel.setBackground(Color.orange);
 
-            playerPanel.setLayout(new GridLayout(2, 4, 10, 10));
+            bottomPanel.setLayout(new GridLayout(1, 3));
+            bottomPanel.setBackground(backGround);
+            bottomPanel.setPreferredSize(new Dimension(windowWidth, 400));
+
+            buttonPanel.setLayout(new GridLayout(2, 1));
+            buttonPanel.setBackground(backGround);
+
+            textOutPanel.setLayout(new GridLayout(2, 1));
+            textOutPanel.setBackground(backGround);
+
+            playerPanel.setLayout(new GridLayout(2, 3, 10, 10));
             playerPanel.setBackground(backGround);
 
             npcOnePanel.setLayout(new BorderLayout());
@@ -264,20 +304,8 @@ public class GolfGame implements ActionListener {
 
             // Center of card table
             tableCenter.setBackground(backGround);
-            // tableCenter.setLayout(new GridLayout(2, 1));
-
-            // scoreBoard = new JTextArea(11, 4);
-            // scoreBoard.setFont(new Font("Times New Roman", Font.BOLD, 14));
-            // scoreBoard.setText("| Round | YOU | " + npcOneName + " | " + npcTwoName + " |
-            // " + npcThreeName
-            // + " | \n ---------------");
-
-            // draw from deck
-            deckButton = new JButton("Draw Card");
-            deckButton.addActionListener(this);
-
-            // draw from discard pile
-            kittyButton = new JButton("Discard");
+            // deckButton = new JButton();
+            kittyButton = new JButton();
             kittyButton.addActionListener(this);
 
             // start next game
@@ -289,9 +317,34 @@ public class GolfGame implements ActionListener {
             endGameButton = new JButton();
             endGameButton.setText("End Game");
             endGameButton.addActionListener(this);
-            for (int k = 1; k <= 6; k++) {
 
-                int cardNumber = k;
+            // scoreboard
+            scoreBoard = new JTable(scores, columnLabels);
+            scoreBoard.setBackground(Color.white);
+            scoreBoard.setDefaultEditor(Object.class, null); // Citation #5 in readme, disables user from editing table
+                                                             // values
+
+            userInfo = new JTextArea();
+            userInfo.setFont(new Font("Dialog", Font.BOLD, 20));
+            userInfo.setEditable(false);
+
+            // NPC JLabel for displaying NPC names
+            npcOneTitle.setText(npcOneName);
+            npcOneTitle.setFont(new Font("Serif", Font.BOLD, 30));
+
+            npcTwoTitle.setText(npcTwoName);
+            npcTwoTitle.setFont(new Font("Serif", Font.BOLD, 30));
+
+            npcThreeTitle.setText(npcThreeName);
+            npcThreeTitle.setFont(new Font("Serif", Font.BOLD, 30));
+
+            npcOnePanel.add(npcOneTitle, BorderLayout.SOUTH);
+            npcTwoPanel.add(npcTwoTitle, BorderLayout.WEST);
+            npcThreePanel.add(npcThreeTitle, BorderLayout.SOUTH);
+
+            for (int k = 1; k <= 7; k++) {
+
+                // int cardNumber = k;
                 JButton cardButton = new JButton();
                 ImageIcon cardImage = new ImageIcon("src/cards/BACK.png");
                 Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
@@ -319,7 +372,7 @@ public class GolfGame implements ActionListener {
                     case 3 -> {
                         cardButton3 = cardButton;
                         playerPanel.add(cardButton3);
-                        playerPanel.add(startNextButton);
+                        // playerPanel.add(startNextButton);
                     }
                     case 4 -> {
                         cardButton4 = cardButton;
@@ -332,17 +385,46 @@ public class GolfGame implements ActionListener {
                     case 6 -> {
                         cardButton6 = cardButton;
                         playerPanel.add(cardButton6);
-                        playerPanel.add(endGameButton);
+                        // playerPanel.add(endGameButton);
                     }
+                    case 7 -> {
+                        // draw from deck
+                        deckButton = cardButton;
+                        deckButton.setText("Draw Pile");
+                        deckButton.setFont(new Font("Serif", Font.BOLD, 30));
+                        deckButton.setFocusable(false);
+                        tableCenter.add(deckButton);
+                    }
+
                 }
             }
+            Card discard = playableDeck.peek();
+            tableCenter.add(kittyButton);
+            ImageIcon discardImage = new ImageIcon(discard.getCardFile());
+            Image scaleDownKitty = discardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
+            discardImage = new ImageIcon(scaleDownKitty);
+            kittyButton.setIcon(discardImage);
+            kittyButton.setBorderPainted(false);
+            kittyButton.setContentAreaFilled(false);
+            kittyButton.setOpaque(false);
+            kittyButton.setText("Discard Pile");
+            kittyButton.setFont(new Font("Serif", Font.BOLD, 30));
+            kittyButton.setFocusable(false);
 
-            // adding card buttons to table center
-            tableCenter.add(deckButton);
             tableCenter.add(kittyButton);
 
+            buttonPanel.add(startNextButton);
+            buttonPanel.add(endGameButton);
+
+            textOutPanel.add(scoreBoard);
+            textOutPanel.add(userInfo);
+
+            bottomPanel.add(textOutPanel);
+            bottomPanel.add(playerPanel);
+            bottomPanel.add(buttonPanel);
+
             gamePanel.add(tableCenter, BorderLayout.CENTER);
-            gamePanel.add(playerPanel, BorderLayout.SOUTH);
+            gamePanel.add(bottomPanel, BorderLayout.SOUTH);
             gamePanel.add(npcOnePanel, BorderLayout.WEST);
             gamePanel.add(npcTwoPanel, BorderLayout.NORTH);
             gamePanel.add(npcThreePanel, BorderLayout.EAST);
@@ -353,8 +435,65 @@ public class GolfGame implements ActionListener {
             frame.setLocationRelativeTo(null);
             frame.setResizable(false);
             frame.setVisible(true);
-
+            userInfo.setText("Your turn is up!");
         }
+    }
+
+    public void scoreTrack() {
+
+    }
+
+    public void takeFromDiscard() {
+        toPlace = playableDeck.pop();
+        tableCenter.repaint();
+
+    }
+
+    public void takeFromDraw() {
+        playableDeck.pop();
+        ImageIcon flippedImage = new ImageIcon(playableDeck.peek().getCardFile());
+        Image scaleDownDraw = flippedImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
+        flippedImage = new ImageIcon(scaleDownDraw);
+        deckButton.setIcon(flippedImage);
+        tableCenter.repaint();
+
+    }
+
+    public void repaintDraw() {
+        ImageIcon cardImage = new ImageIcon("src/cards/BACK.png");
+        Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
+        cardImage = new ImageIcon(scaleDown);
+        deckButton.setIcon(cardImage);
+        tableCenter.repaint();
+
+    }
+
+    public void disablePlayerCards() {
+        cardButton1.setEnabled(false);
+        cardButton2.setEnabled(false);
+        cardButton3.setEnabled(false);
+        cardButton4.setEnabled(false);
+        cardButton5.setEnabled(false);
+        cardButton6.setEnabled(false);
+    }
+
+    public void enablePlayerCards() {
+        cardButton1.setEnabled(true);
+        cardButton2.setEnabled(true);
+        cardButton3.setEnabled(true);
+        cardButton4.setEnabled(true);
+        cardButton5.setEnabled(true);
+        cardButton6.setEnabled(true);
+    }
+
+    public void disableDecks() {
+        deckButton.setEnabled(false);
+        kittyButton.setEnabled(false);
+    }
+
+    public void enableDecks() {
+        deckButton.setEnabled(true);
+        kittyButton.setEnabled(true);
     }
 
     public void freshDeck() {
@@ -427,9 +566,7 @@ public class GolfGame implements ActionListener {
             npcTwo.addCard(v, playableDeck.pop());
             npcThree.addCard(v, playableDeck.pop());
         }
-        discard.push(playableDeck.pop());
-
-        // System.out.println(playerHand); //used for testing
+        // discard.push(playableDeck.pop());
 
     }
 
@@ -438,39 +575,116 @@ public class GolfGame implements ActionListener {
      */
     public void flip(int cardNumber) {
 
-        if ((playerTurn == 0 && drewCard) || beginGame) {
+        toDiscard = playerHand.get(cardNumber);
+        System.out.println(toDiscard);
+        ImageIcon cardImage = new ImageIcon(toDiscard.getCardFile());
+        Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
+        cardImage = new ImageIcon(scaleDown);
 
-            Card card = playerHand.get(cardNumber);
-            System.out.println(card);
-            ImageIcon cardImage = new ImageIcon(card.getCardFile());
-            Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
-            cardImage = new ImageIcon(scaleDown);
+        switch (cardNumber) {
+            case 1 -> cardButton1.setIcon(cardImage);
+            case 2 -> cardButton2.setIcon(cardImage);
+            case 3 -> cardButton3.setIcon(cardImage);
+            case 4 -> cardButton4.setIcon(cardImage);
+            case 5 -> cardButton5.setIcon(cardImage);
+            case 6 -> cardButton6.setIcon(cardImage);
+        }
+        playerPanel.repaint();
+
+        // swapping cards
+        Timer userSeeCard = new Timer(5000, e -> {
+
+            playableDeck.push(toDiscard);
+            playerHand.put(cardNumber, toPlace);
+
+            ImageIcon newCardImage = new ImageIcon(toPlace.getCardFile());
+            Image scaleDownAgain = newCardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
+            newCardImage = new ImageIcon(scaleDownAgain);
 
             switch (cardNumber) {
-                case 1 -> cardButton1.setIcon(cardImage);
-                case 2 -> cardButton2.setIcon(cardImage);
-                case 3 -> cardButton3.setIcon(cardImage);
-                case 4 -> cardButton4.setIcon(cardImage);
-                case 5 -> cardButton5.setIcon(cardImage);
-                case 6 -> cardButton6.setIcon(cardImage);
+                case 1 -> cardButton1.setIcon(newCardImage);
+                case 2 -> cardButton2.setIcon(newCardImage);
+                case 3 -> cardButton3.setIcon(newCardImage);
+                case 4 -> cardButton4.setIcon(newCardImage);
+                case 5 -> cardButton5.setIcon(newCardImage);
+                case 6 -> cardButton6.setIcon(newCardImage);
             }
+            playerPanel.repaint();
 
-            playerTurn++;
-        }
-
-        return;
+        });
+        disablePlayerCards();
+        disableDecks();
 
     }
 
-    public void npcCycle() {
-        npcOne.pickFaceUp();
-        npcTwo.pickFaceUp();
-        npcThree.pickFaceUp();
+    int delayOne = 2000;
+    int delayTwo = 2000;
+    int delayThree = 2000;
 
-        npcOnePanel.repaint();
-        npcTwoPanel.repaint();
-        npcThreePanel.repaint();
-        // playerPanel.repaint();
+    /**
+     * Notes: Used an external RNG, when each instance used its own found that they
+     * would all generate same number often
+     */
+    public void npcCycle() {
+        delayOne = shuffle.nextInt(3000) + 2000;
+        delayTwo = shuffle.nextInt(3000) + 2000;
+        delayThree = shuffle.nextInt(3000) + 2000;
+
+        while (playerTurn != 0) {
+            switch (playerTurn) {
+                case 0:
+                    enableDecks();
+                    userInfo.setText("Your turn is up!");
+                    userInfo.repaint();
+                    break;
+
+                case 1:
+                    userInfo.setText(npcThreeName + " is up!");
+                    Timer npcOneWait = new Timer(delayOne, e -> {
+                        randomNum = shuffle.nextInt(6) + 1;
+                        if (!npcOne.pickFaceUp(randomNum, playableDeck.peek())) {
+                            takeFromDraw();
+                            
+                        }
+                        npcOnePanel.repaint();
+                        userInfo.repaint();
+                    });
+                    npcOneWait.setRepeats(false);
+                    npcOneWait.start();
+                    playerTurn++;
+                    break;
+
+                case 2:
+                    userInfo.setText(npcTwoName + " is up!");
+                    Timer npcTwoWait = new Timer(delayTwo, e -> {
+                        randomNum = shuffle.nextInt(6) + 1;
+                        npcTwo.pickFaceUp(randomNum);
+                        npcTwoPanel.repaint();
+                        userInfo.repaint();
+                    });
+                    npcTwoWait.setRepeats(false);
+                    npcTwoWait.start();
+                    playerTurn++;
+                    break;
+
+                case 3:
+                    userInfo.setText(npcThreeName + " is up!");
+                    Timer npcThreeWait = new Timer(delayThree, e -> {
+                        randomNum = shuffle.nextInt(6) + 1;
+                        npcThree.pickFaceUp(randomNum);
+                        userInfo.setText("Your turn is up!");
+                        npcThreePanel.repaint();
+                        userInfo.repaint();
+                        playerTurn = 0;
+                        enableDecks();
+                    });
+                    npcThreeWait.setRepeats(false);
+                    npcThreeWait.start();
+                    break;
+
+            }
+        }
+        userInfo.repaint();
 
     }
 

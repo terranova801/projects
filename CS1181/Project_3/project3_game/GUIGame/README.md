@@ -20,5 +20,9 @@ The `JAVA PROJECTS` view allows you to manage your dependencies. More details ca
 
 ## Citations/Sources:
 
-- [Cardscans](https://cardscans.piwigo.com/) Source for the card image files
-- [Kenny Yip Coding](https://www.kennyyipcoding.com/) Tutorials used to develope the game design/ideas
+1) [Cardscans](https://cardscans.piwigo.com/) Source for the card image files
+2) [Kenny Yip Coding](https://www.kennyyipcoding.com/) Tutorials used to develope the game design/ideas
+3)
+4)
+5) [Stack Overflow: How to make a JTable non-editable](https://stackoverflow.com/questions/1990817/how-to-make-a-jtable-non-editable)
+
