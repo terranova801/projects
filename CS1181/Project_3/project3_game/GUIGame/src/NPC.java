@@ -7,7 +7,7 @@ public class NPC {
     String position;
     String name;
     boolean playerOut = false;
-
+    int cardPositionRand;
     Map<Integer, Card> hand;
     Map<Integer, Integer> score; // key is round number, value is round score
     Random random = new Random();
@@ -27,8 +27,10 @@ public class NPC {
         return hand.get(cardSpot);
     }
     // randomly flips card at beginning of game
-    public int pickFaceUp() {
-        return random.nextInt(6) + 1;
+    public void pickFaceUp() {
+        cardPositionRand = random.nextInt(6) + 1;
+        hand.get(cardPositionRand).flipCard();
+        return;
     }
 
 

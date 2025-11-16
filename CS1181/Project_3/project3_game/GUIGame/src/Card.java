@@ -20,6 +20,10 @@ public class Card {
         }
         
         public String getCardFile() {
-            return "GUIGame/src/cards/" + this.value + "-" + this.suite + ".png";
+            return "src/cards/" + this.value + "-" + this.suite + ".png";
+        }
+        public boolean hiddenCard() {
+            return faceDown;
+
         }
     }
