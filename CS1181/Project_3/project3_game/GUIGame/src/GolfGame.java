@@ -69,6 +69,176 @@ public class GolfGame {
     JButton endGameButton;
     JTextArea scoreBoard;
 
+
+    int windowWidth = 1300;
+        int windowHeight = 1300;
+
+        Color backGround = new Color(53, 101, 77);
+
+        frame = new JFrame("6 Card Golf");
+        bottomPanel = new JPanel(); // main panel that elements are added to
+        playerPanel = new JPanel(); // players hand at botton of window
+        IOPanel = new JPanel();
+        tableCenter = new JPanel(); // center of table where deck and discard piles exist
+        // npcOnePanel = new JPanel(); // npcOne hand on left side of window
+        npcTwoPanel = new JPanel(); // npcTwo hand on top of window
+        npcThreePanel = new JPanel(); // npcThree hand on right of window
+
+        // setting up panels
+
+        tableCenter = new JPanel() {
+            @Override
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                chooseFaceUp(g);
+
+            }
+        };
+
+        bottomPanel.setLayout(new BorderLayout());
+        bottomPanel.setBackground(new Color(53, 101, 77));
+
+        IOPanel.setLayout(new GridLayout(2, 1));
+        IOPanel.setBackground(new Color(53, 101, 77));
+
+        npcOnePanel = new JPanel() {
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                for (int k = 1; k <= 6; k++) {
+
+                    // int cardNumber = k;
+                    ImageIcon icon = new ImageIcon("GUIGame/src/cards/BACK.png");
+                    Image cardImage = icon.getImage();
+                    g.drawImage(cardImage, 10 + (cardWidth + 5) * k, 10, cardWidth, cardHeight, this);
+                    // Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth,
+                    // cardHeight, Image.SCALE_SMOOTH);
+                    // cardImage = new ImageIcon(scaleDown);
+                    // cardButton.setIcon(cardImage);
+                }
+            }
+        };
+
+        // npcOnePanel.setLayout(new BorderLayout());
+        npcOnePanel.setBackground(backGround);
+
+        npcTwoPanel.setLayout(new BorderLayout());
+        npcTwoPanel.setBackground(backGround);
+
+        npcThreePanel.setLayout(new BorderLayout());
+        npcThreePanel.setBackground(backGround);
+
+        // buttons
+        startNextButton = new JButton();
+        startNextButton.setText("Start next hole");
+        startNextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (roundOver) {
+                    startNextRound = true;
+                }
+            }
+        });
+
+        endGameButton = new JButton();
+        endGameButton.setText("End Game");
+        endGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // end game
+            }
+        });
+
+        IOPanel.add(startNextButton);
+        IOPanel.add(endGameButton);
+
+        // panels for each player and table center
+        // tableCenter.setLayout(new BorderLayout());
+        tableCenter.setBackground(backGround);
+        deckButton = new JButton();
+        kittyButton = new JButton();
+        scoreBoard = new JTextArea(11, 4);
+        scoreBoard.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        scoreBoard.setText("| Round |  YOU  | " + npcOneName + " | " + npcTwoName + " | " + npcThreeName
+                + " | \n ---------------");
+
+        tableCenter.add(deckButton);
+        tableCenter.add(kittyButton);
+
+        playerPanel.setLayout(new GridLayout(2, 3, 10, 10));
+        // playerPanel.setSize(300, 400);
+        playerPanel.setBackground(backGround);
+        for (int k = 1; k <= 6; k++) {
+
+            int cardNumber = k;
+            JButton cardButton = new JButton();
+            ImageIcon cardImage = new ImageIcon("GUIGame/src/cards/BACK.png");
+            Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
+            cardImage = new ImageIcon(scaleDown);
+            cardButton.setIcon(cardImage);
+            // cardButton.setBorderPainted(false);
+            // cardButton.setContentAreaFilled(false);
+            // cardButton.setOpaque(false);
+            // cardButton.setSize(cardWidth, cardHeight); //doesn't work need to implement
+            // gridBagLayout next time I think the grid layout is causing spacing issues
+
+            cardButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+
+                    playerDeckInteract(cardNumber);
+                }
+
+            });
+
+            // now assigning cardButton to the appropriate button defined earlier
+            switch (k) {
+                case 1 -> {
+                    cardButton1 = cardButton;
+                    playerPanel.add(cardButton1);
+                    System.out.println("inside case 1");
+                }
+                case 2 -> {
+                    cardButton2 = cardButton;
+                    playerPanel.add(cardButton2);
+                }
+                case 3 -> {
+                    cardButton3 = cardButton;
+                    playerPanel.add(cardButton3);
+                }
+                case 4 -> {
+                    cardButton4 = cardButton;
+                    playerPanel.add(cardButton4);
+                }
+                case 5 -> {
+                    cardButton5 = cardButton;
+                    playerPanel.add(cardButton5);
+                }
+                case 6 -> {
+                    cardButton6 = cardButton;
+                    playerPanel.add(cardButton6);
+                }
+            }
+        }
+
+        bottomPanel.add(playerPanel, BorderLayout.CENTER);
+        bottomPanel.add(scoreBoard, BorderLayout.WEST);
+        bottomPanel.add(IOPanel, BorderLayout.EAST);
+
+        frame.add(tableCenter, BorderLayout.CENTER);
+        frame.add(bottomPanel, BorderLayout.SOUTH);
+        frame.add(npcOnePanel, BorderLayout.WEST);
+        frame.add(npcTwoPanel, BorderLayout.NORTH);
+        frame.add(npcThreePanel, BorderLayout.EAST);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(windowWidth, windowHeight);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setVisible(true);
+
+    }
+
+
     GolfGame() {
         if (holeNumber <= 1) {
             npcOne = new NPC(npcOneName);
@@ -254,172 +424,5 @@ public class GolfGame {
 
     public void MyFrame extends JFrame implements ActionListener() {
 
-        int windowWidth = 1300;
-        int windowHeight = 1300;
-
-        Color backGround = new Color(53, 101, 77);
-
-        frame = new JFrame("6 Card Golf");
-        bottomPanel = new JPanel(); // main panel that elements are added to
-        playerPanel = new JPanel(); // players hand at botton of window
-        IOPanel = new JPanel();
-        tableCenter = new JPanel(); // center of table where deck and discard piles exist
-        // npcOnePanel = new JPanel(); // npcOne hand on left side of window
-        npcTwoPanel = new JPanel(); // npcTwo hand on top of window
-        npcThreePanel = new JPanel(); // npcThree hand on right of window
-
-        // setting up panels
-
-        tableCenter = new JPanel() {
-            @Override
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                chooseFaceUp(g);
-
-            }
-        };
-
-        bottomPanel.setLayout(new BorderLayout());
-        bottomPanel.setBackground(new Color(53, 101, 77));
-
-        IOPanel.setLayout(new GridLayout(2, 1));
-        IOPanel.setBackground(new Color(53, 101, 77));
-
-        npcOnePanel = new JPanel() {
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-
-                for (int k = 1; k <= 6; k++) {
-
-                    // int cardNumber = k;
-                    ImageIcon icon = new ImageIcon("GUIGame/src/cards/BACK.png");
-                    Image cardImage = icon.getImage();
-                    g.drawImage(cardImage, 10 + (cardWidth + 5) * k, 10, cardWidth, cardHeight, this);
-                    // Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth,
-                    // cardHeight, Image.SCALE_SMOOTH);
-                    // cardImage = new ImageIcon(scaleDown);
-                    // cardButton.setIcon(cardImage);
-                }
-            }
-        };
-
-        // npcOnePanel.setLayout(new BorderLayout());
-        npcOnePanel.setBackground(backGround);
-
-        npcTwoPanel.setLayout(new BorderLayout());
-        npcTwoPanel.setBackground(backGround);
-
-        npcThreePanel.setLayout(new BorderLayout());
-        npcThreePanel.setBackground(backGround);
-
-        // buttons
-        startNextButton = new JButton();
-        startNextButton.setText("Start next hole");
-        startNextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (roundOver) {
-                    startNextRound = true;
-                }
-            }
-        });
-
-        endGameButton = new JButton();
-        endGameButton.setText("End Game");
-        endGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // end game
-            }
-        });
-
-        IOPanel.add(startNextButton);
-        IOPanel.add(endGameButton);
-
-        // panels for each player and table center
-        // tableCenter.setLayout(new BorderLayout());
-        tableCenter.setBackground(backGround);
-        deckButton = new JButton();
-        kittyButton = new JButton();
-        scoreBoard = new JTextArea(11, 4);
-        scoreBoard.setFont(new Font("Times New Roman", Font.BOLD, 14));
-        scoreBoard.setText("| Round |  YOU  | " + npcOneName + " | " + npcTwoName + " | " + npcThreeName
-                + " | \n ---------------");
-
-        tableCenter.add(deckButton);
-        tableCenter.add(kittyButton);
-
-        playerPanel.setLayout(new GridLayout(2, 3, 10, 10));
-        // playerPanel.setSize(300, 400);
-        playerPanel.setBackground(backGround);
-        for (int k = 1; k <= 6; k++) {
-
-            int cardNumber = k;
-            JButton cardButton = new JButton();
-            ImageIcon cardImage = new ImageIcon("GUIGame/src/cards/BACK.png");
-            Image scaleDown = cardImage.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
-            cardImage = new ImageIcon(scaleDown);
-            cardButton.setIcon(cardImage);
-            // cardButton.setBorderPainted(false);
-            // cardButton.setContentAreaFilled(false);
-            // cardButton.setOpaque(false);
-            // cardButton.setSize(cardWidth, cardHeight); //doesn't work need to implement
-            // gridBagLayout next time I think the grid layout is causing spacing issues
-
-            cardButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-
-                    playerDeckInteract(cardNumber);
-                }
-
-            });
-
-            // now assigning cardButton to the appropriate button defined earlier
-            switch (k) {
-                case 1 -> {
-                    cardButton1 = cardButton;
-                    playerPanel.add(cardButton1);
-                    System.out.println("inside case 1");
-                }
-                case 2 -> {
-                    cardButton2 = cardButton;
-                    playerPanel.add(cardButton2);
-                }
-                case 3 -> {
-                    cardButton3 = cardButton;
-                    playerPanel.add(cardButton3);
-                }
-                case 4 -> {
-                    cardButton4 = cardButton;
-                    playerPanel.add(cardButton4);
-                }
-                case 5 -> {
-                    cardButton5 = cardButton;
-                    playerPanel.add(cardButton5);
-                }
-                case 6 -> {
-                    cardButton6 = cardButton;
-                    playerPanel.add(cardButton6);
-                }
-            }
-        }
-
-        bottomPanel.add(playerPanel, BorderLayout.CENTER);
-        bottomPanel.add(scoreBoard, BorderLayout.WEST);
-        bottomPanel.add(IOPanel, BorderLayout.EAST);
-
-        frame.add(tableCenter, BorderLayout.CENTER);
-        frame.add(bottomPanel, BorderLayout.SOUTH);
-        frame.add(npcOnePanel, BorderLayout.WEST);
-        frame.add(npcTwoPanel, BorderLayout.NORTH);
-        frame.add(npcThreePanel, BorderLayout.EAST);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(windowWidth, windowHeight);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setVisible(true);
-
-    }
-
+        
 }
