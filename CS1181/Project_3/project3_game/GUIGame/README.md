@@ -1,28 +1,44 @@
-## Getting Started
+# 6-Card Golf (Java Swing GUI)
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+This project is a Java Swing implementation of the card game *6-Card Golf*.  
+You play against three NPCs (Tiger, Harold, and Steve). The goal is to finish each hole (round) with the **lowest score**.
 
-## Folder Structure
+Begin game by flipping a card in your hand to reveal. 
+Then draw a card from either the discard pile(kitty) or the draw pile. You can choose to either place the drawn card into your hand, or discard the drawn card and end your turn
+The game is over when a player flips over all of their cards.
 
-The workspace contains two folders by default, where:
+---
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Running the Project
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+> ⚠️ Important: The game expects the working directory to be the **`GUIGame`** folder so that the image paths like `src/cards/…` resolve correctly.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+### Option 1: Run from VS Code
 
-## Dependency Management
+1. Open VS Code.
+2. Use **File → Open Folder…** and select the **`GUIGame`** folder (the one containing `src`, `bin`, etc.).
+3. Make sure the Java extension pack is installed.
+4. In the **JAVA PROJECTS** or **Explorer** view, open the `GolfGame` class.
+5. Click the **Run** button (▶) next to the `main` method (or use `Run → Start Debugging` and choose `GolfGame` as the main class).
+6. The GUI window should open, and the card images should load correctly from `src/cards`.
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+If your run configuration lets you set a working directory, make sure it is the **`GUIGame`** root folder.
 
+### Option 2: Run from the Terminal
 
+From inside the `GUIGame` folder:
+
+```bash
+# Compile
+javac -d bin src/*.java
+
+# Run (make sure GolfGame has a main method)
+java -cp bin GolfGame
 ## Citations/Sources:
 
 1) [Cardscans](https://cardscans.piwigo.com/) Source for the card image files
 2) [Kenny Yip Coding](https://www.kennyyipcoding.com/) Tutorials used to develope the game design/ideas
-3)
-4)
-5) [Stack Overflow: How to make a JTable non-editable](https://stackoverflow.com/questions/1990817/how-to-make-a-jtable-non-editable)
+3) [Youtube: Bro Code - Java Swing GUI Full Course](https://www.youtube.com/watch?v=Kmgo00avvEw&t=16971s)
+4) [Stack Overflow: How to make a JTable non-editable](https://stackoverflow.com/questions/1990817/how-to-make-a-jtable-non-editable)
+5) ChatGPT used for proofreading code, helping with debugging and formatting/editing README instructions only. NO CODE was used from ChatGPT
 

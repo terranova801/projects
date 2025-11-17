@@ -34,4 +34,7 @@ public class Card {
         return this.numValue;
 
     }
+    public String getStringValue() {
+        return this.stringValue;
+    }
 }
