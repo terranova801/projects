@@ -999,6 +999,7 @@ public class GolfGame implements ActionListener {
     public void cleanupRound() {
         flipAll();
         scoreTrack();
+        userInfo.append(" wins hole " + holeNumber);
         startNextButton.setEnabled(true);
     }
 
@@ -1073,6 +1074,17 @@ public class GolfGame implements ActionListener {
         npcOneScore[scoreBoardRow] = npcOne.getScore();
         npcTwoScore[scoreBoardRow] = npcTwo.getScore();
         npcThreeScore[scoreBoardRow] = npcThree.getScore();
+
+        // figure out round winner
+        // if (npcOneScore[scoreBoardRow] < npcTwoScore[scoreBoardRow]){
+
+
+        // }
+        // else if (npcOneScore[scoreBoardRow] < npcTwoScore[scoreBoardRow]) {
+
+        // }
+
+
 
         // add current round score to scoreboard
         scoreBoardBuild.setValueAt(holeNumber, scoreBoardRow, 0);

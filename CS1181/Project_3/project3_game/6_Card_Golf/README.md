@@ -3,9 +3,9 @@
 This project is a Java Swing implementation of the card game *6-Card Golf*.  
 You play against three NPCs (Tiger, Harold, and Steve). The goal is to finish each hole (round) with the **lowest score**.
 
-Begin game by flipping a card in your hand to reveal. 
-Then draw a card from either the discard pile(kitty) or the draw pile. You can choose to either place the drawn card into your hand, or discard the drawn card and end your turn
-The game is over when a player flips over all of their cards.
+- Begin game by flipping a card in your hand to reveal. 
+- Then draw a card from either the discard pile(kitty) or the draw pile. You can choose to either place the drawn card into your hand, or discard the drawn card and end your turn
+- The game is over when a player flips over all of their cards.
 
 ---
 
