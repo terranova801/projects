@@ -370,7 +370,7 @@ public class GolfGame implements ActionListener {
                                                          // values
 
         JScrollPane scoreScroll = new JScrollPane(scoreBoard);
-        
+
         // setup user text output
         userInfo = new JTextArea();
         userInfo.setFont(new Font("Dialog", Font.BOLD, 20));
@@ -483,7 +483,7 @@ public class GolfGame implements ActionListener {
         // adding all panels
         gamePanel.add(tableCenter, BorderLayout.CENTER); // center of table which holds decks
         gamePanel.add(bottomPanel, BorderLayout.SOUTH); // player stuff on bottom of display
-        gamePanel.add(npcOnePanel, BorderLayout.WEST); //npcOne on left
+        gamePanel.add(npcOnePanel, BorderLayout.WEST); // npcOne on left
         gamePanel.add(npcTwoPanel, BorderLayout.NORTH); // npc two on top
         gamePanel.add(npcThreePanel, BorderLayout.EAST); // npcthree on right
 
@@ -890,9 +890,11 @@ public class GolfGame implements ActionListener {
                 npcTurn(npcThree, npcThreePanel, delayThree, () -> { // npcthree turn
 
                     gameOver(); // checking if everyone is out
-                    System.out.println("\n" + playerName + " is up!");
-                    userInfo.append("\nYou are up!");
-                    lockDecks(true); // unlock decks for player
+                    if (!roundOver) {
+                        System.out.println("\n" + playerName + " is up!");
+                        userInfo.append("\nYou are up!");
+                        lockDecks(true); // unlock decks for player
+                    }
 
                 });
             });
@@ -1013,7 +1015,19 @@ public class GolfGame implements ActionListener {
         npcOne.newRound();
         npcTwo.newRound();
         npcThree.newRound();
-        freshDeck();
+        freshDeck(); // new deck/cards created and dealt
+
+        // reset card images
+        ImageIcon back = new ImageIcon("src/cards/BACK.png");
+        Image scaleDown = back.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_SMOOTH);
+        back = new ImageIcon(scaleDown);
+        JButton[] buttons = { cardButton1, cardButton2, cardButton3, cardButton4, cardButton5, cardButton6 }; // wish i would've figured this out sooner
+
+        for (JButton b : buttons) {
+            b.setIcon(back);
+            b.setDisabledIcon(back);
+        }
+
         playerPanel.repaint();
         npcOnePanel.repaint();
         npcTwoPanel.repaint();
