@@ -33,7 +33,7 @@ From inside the `GUIGame` folder:
 javac -d bin src/*.java
 
 # Run (make sure GolfGame has a main method)
-java -cp bin GolfGame
+java -cp bin App
 ## Citations/Sources:
 
 1) [Cardscans](https://cardscans.piwigo.com/) Source for some card image files
