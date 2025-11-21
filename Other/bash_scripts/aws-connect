@@ -2,7 +2,7 @@
 
 # Go to the project directory first
 cd /media/shared/proj || {
-    echo "❌ Failed to change directory to /media/shared/proj"
+    echo "Failed to change directory to /media/shared/proj"
     exit 1
 }
 
