@@ -9,7 +9,6 @@ usage() {
     exit 1
 }
 
-# Make sure the user passed a directory name
 if [ -z "$1" ]; then
     usage
 fi
@@ -28,7 +27,4 @@ case "$1" in
         echo "❌ Invalid option: $1"
         usage
         ;;
-esac
-
-# Launch a new shell so you stay in that directory
 exec $SHELL
